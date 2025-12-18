@@ -15,18 +15,16 @@
   ],
   "frontends": [
     "desktop",
-    "mobile",
     "browser-desktop",
-    "browser-mobile",
     "desktop-window"
   ],
   "displayName": {
-    "en_US": "Plugin sample with vite and svelte",
-    "zh_CN": "插件样例 vite + svelte 版"
+    "en_US": "Inbox Light",
+    "zh_CN": "简化收集箱"
   },
   "description": {
-    "en_US": "SiYuan plugin sample with vite and svelte",
-    "zh_CN": "使用 vite 和 svelte 开发的思源插件样例"
+    "en_US": "A Siyuan plugin to lighten the inbox",
+    "zh_CN": "一个简化收集箱的思源插件"
   },
   "readme": {
     "en_US": "README.md",
