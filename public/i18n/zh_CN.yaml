@@ -8,3 +8,5 @@ setting:
   replaceBuiltIn:
     title: "替换内置收集箱"
     description: "选项开启后，本插件会替换内置收集箱的面板和快捷键；关闭后，恢复内置收集箱。"
+dock:
+  title: "简化收集箱"

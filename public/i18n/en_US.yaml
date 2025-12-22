@@ -8,3 +8,5 @@ setting:
   replaceBuiltIn:
     title: "Replace Built-in Inbox"
     description: "Enable to replace the built-in inbox panel and shortcut; disable to restore the built-in inbox."
+dock:
+  title: "Inbox Light"
