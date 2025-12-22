@@ -25,6 +25,7 @@ import SettingExample from "@/setting-example.svelte";
 
 import { SettingUtils } from "./libs/setting-utils";
 import { svelteDialog } from "./libs/dialog";
+import { mount, unmount } from "svelte";
 
 const STORAGE_NAME = "menu-config";
 const TAB_TYPE = "custom_tab";
@@ -357,12 +358,12 @@ export default class PluginSample extends Plugin {
         );
 
         let tabDiv = document.createElement("div");
-        new HelloExample({
-            target: tabDiv,
-            props: {
-                app: this.app,
-            }
-        });
+        mount(HelloExample, {
+                    target: tabDiv,
+                    props: {
+                        app: this.app,
+                    }
+                });
         this.customTab = this.addTab({
             type: TAB_TYPE,
             init() {
@@ -412,12 +413,12 @@ export default class PluginSample extends Plugin {
             destroyCallback: (options) => {
                 console.log("destroyCallback", options);
                 //You'd better destroy the component when the dialog is closed
-                pannel.$destroy();
+                unmount(pannel);
             }
         });
-        let pannel = new SettingExample({
-            target: dialog.element.querySelector("#SettingPanel"),
-        });
+        let pannel = mount(SettingExample, {
+                    target: dialog.element.querySelector("#SettingPanel"),
+                });
     }
 
     private eventBusPaste(event: any) {
@@ -474,12 +475,12 @@ export default class PluginSample extends Plugin {
             title: `SiYuan ${Constants.SIYUAN_VERSION}`,
             width: this.isMobile ? "92vw" : "720px",
             constructor: (container: HTMLElement) => {
-                return new HelloExample({
-                    target: container,
-                    props: {
-                        app: this.app,
-                    }
-                });
+                return mount(HelloExample, {
+                                    target: container,
+                                    props: {
+                                        app: this.app,
+                                    }
+                                });
             }
         });
     }

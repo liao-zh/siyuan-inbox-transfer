@@ -11,14 +11,14 @@
     import { version, sql as query } from "@/api";
     import { showMessage, fetchPost, Protyle } from "siyuan";
 
-    export let app;
+    let { app } = $props();
 
-    let time: string = "";
+    let time: string = $state("");
     let ver: string = "";
 
-    let divProtyle: HTMLDivElement;
+    let divProtyle: HTMLDivElement = $state();
     let protyle: any;
-    let blockID: string = '';
+    let blockID: string = $state('');
 
     onMount(async () => {
         ver = await version();
@@ -50,14 +50,14 @@
     <div class="fn__hr"></div>
     <div class="fn__hr"></div>
     <div>API demo:</div>
-    <div class="fn__hr" />
+    <div class="fn__hr"></div>
     <div class="plugin-sample__time">
         System current time: <span id="time">{time}</span>
     </div>
-    <div class="fn__hr" />
-    <div class="fn__hr" />
+    <div class="fn__hr"></div>
+    <div class="fn__hr"></div>
     <div>Protyle demo: id = {blockID}</div>
-    <div class="fn__hr" />
-    <div id="protyle" style="height: 360px;" bind:this={divProtyle}/>
+    <div class="fn__hr"></div>
+    <div id="protyle" style="height: 360px;" bind:this={divProtyle}></div>
 </div>
 
