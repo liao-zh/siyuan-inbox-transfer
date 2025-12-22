@@ -1,7 +1,7 @@
 // 管理设置
 import { showMessage } from "siyuan";
+import PluginInboxLight from "@/index";
 import { SettingUtils } from "@/libs/setting-utils";
-import { getPluginInstance } from "@/utils/pluginInstance";
 import { CONSTANTS as C } from "@/constants";
 import { getHPathByID } from "@/utils/api";
 import * as logger from "@/utils/logger";
@@ -11,9 +11,11 @@ import * as logger from "@/utils/logger";
  */
 export class SettingManager {
     private settingUtils: SettingUtils;
-    private plugin = getPluginInstance();
+    // private plugin = getPluginInstance();
+    private plugin: PluginInboxLight;
 
-    constructor() {
+    constructor(plugin: PluginInboxLight) {
+        this.plugin = plugin;
         // 初始化设置
         this.initSettingUtils();
         // 从存储加载设置
@@ -60,10 +62,10 @@ export class SettingManager {
                     //         textElem.innerHTML = `${hint["description"]} ${hint["hpathHint"]}${hint["hpathInvaid"]}`;
                     //     }
                     // }
-                    const hint = i18nSetting[C.SETTING_KEY_INBOXDOCID]
+                    const i18nHint = i18nSetting[C.SETTING_KEY_INBOXDOCID]
                     const hpath = await getHPathByID(value);
                     if (hpath) {
-                        showMessage(`${hint["hpathHint"]}${hpath}`, 0, "info");
+                        showMessage(`${i18nHint["hpathHint"]}${hpath}`, 0, "info");
                     }
                 }
             }
