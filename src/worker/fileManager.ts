@@ -45,7 +45,7 @@ export class FileManager {
     private plugin: PluginInboxLight;
     targetIsValid: boolean = false;
     targetInfo: null|ITarget = null;
-    childDocs: IChildDoc[] = [];
+    childDocs: IChildDoc[] = []; // 列表使用非替换的方式更新，便于在svelte中引用
 
     constructor(plugin: PluginInboxLight) {
         this.plugin = plugin;
@@ -100,7 +100,7 @@ export class FileManager {
     async getChildDocs(): Promise<IChildDoc[]> {
         // 目标文档无效，返回空列表
         if (!this.targetIsValid) {
-            this.childDocs = [];
+            this.childDocs.length = 0;
             return this.childDocs;
         }
 
@@ -113,11 +113,14 @@ export class FileManager {
             }
         );
         // 提取子文档的信息
-        this.childDocs = data.files.map(item => ({
+        // 先清空现有数组（保持引用）
+        this.childDocs.length = 0;
+        // 添加新数据
+        this.childDocs.push(...data.files.map(item => ({
             name: item.name.replace(/\.sy$/, ''),
             id: item.id,
             path: item.path
-        }));
+        })));
         logger.logDebug("获取文档列表", this.childDocs);
         return this.childDocs
     }

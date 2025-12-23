@@ -3,11 +3,11 @@ import PluginInboxLight from "@/index";
 import DockComponent from "@/dockComponent.svelte";
 import { mount } from "svelte";
 
-export interface II18nDock {
-    title: string;
-    locate: string;
-    inboxEmpty: string;
-}
+// export interface II18nDock {
+//     title: string;
+//     locate: string;
+//     inboxEmpty: string;
+// }
 
 export class DockService {
     private plugin: PluginInboxLight;
@@ -40,7 +40,7 @@ export class DockService {
                 const component = mount(DockComponent, {
                     target: dock.element,
                     props: {
-                        i18nDock: this.plugin.i18n.dock as unknown as II18nDock,
+                        plugin: this.plugin,
                     }
                 });
 
