@@ -1,21 +1,23 @@
 // 管理设置
 import { showMessage } from "siyuan";
 import PluginInboxLight from "@/index";
+import { FileManager } from "@/worker/fileManager";
 import { SettingUtils } from "@/libs/setting-utils";
 import { CONSTANTS as C } from "@/constants";
-import { getHPathByID } from "@/utils/api";
 import * as logger from "@/utils/logger";
 
 /**
  * 管理插件设置
  */
-export class SettingManager {
+export class SettingService {
     private settingUtils: SettingUtils;
     // private plugin = getPluginInstance();
     private plugin: PluginInboxLight;
+    private fileManager: FileManager;
 
-    constructor(plugin: PluginInboxLight) {
+    constructor(plugin: PluginInboxLight, fileManager: FileManager) {
         this.plugin = plugin;
+        this.fileManager = fileManager;
         // 初始化设置
         this.initSettingUtils();
         // 从存储加载设置
@@ -47,9 +49,19 @@ export class SettingManager {
             description: i18nSetting[C.SETTING_KEY_INBOXDOCID]["description"],
             action: {
                 callback: async () => {
+                    // 从文本框读取设置值
                     let value = await this.settingUtils.takeAndSave(C.SETTING_KEY_INBOXDOCID);
                     logger.logDebug(`设置：${C.SETTING_KEY_INBOXDOCID}`, value);
-
+                    // 检查并设置目标id
+                    await this.fileManager.setTarget(value);
+                    await this.fileManager.getChildDocs();
+                    // 提示结果
+                    if (this.fileManager.targetIsValid) {
+                        showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetHint"]}${this.fileManager.targetInfo.notebookName}/${this.fileManager.targetInfo.hpath}`, 2000, "info");
+                        // logger.logDebug("childDocs", this.fileManager.childDocs);
+                    } else {
+                        showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetInvalid"]}`, 2000, "error");
+                    }
                     // // 尝试更新描述文本，但不大成功
                     // const textElem = document.querySelector('div.b3-label__text');
                     // logger.logDebug(`textElem: ${textElem?.innerHTML}`)
@@ -57,16 +69,20 @@ export class SettingManager {
                     // if (textElem && textElem.innerHTML.includes(hint["description"])) {
                     //     const hpath = await getHPathByID(value);
                     //     if (hpath) {
-                    //         textElem.innerHTML = `${hint["description"]} ${hint["hpathHint"]}${hpath}`;
+                    //         textElem.innerHTML = `${hint["description"]} ${hint["targetHint"]}${hpath}`;
                     //     } else {
-                    //         textElem.innerHTML = `${hint["description"]} ${hint["hpathHint"]}${hint["hpathInvaid"]}`;
+                    //         textElem.innerHTML = `${hint["description"]} ${hint["targetHint"]}${hint["hpathInvaid"]}`;
                     //     }
                     // }
-                    const i18nHint = i18nSetting[C.SETTING_KEY_INBOXDOCID]
-                    const hpath = await getHPathByID(value);
-                    if (hpath) {
-                        showMessage(`${i18nHint["hpathHint"]}${hpath}`, 0, "info");
-                    }
+                    // const i18nHint = i18nSetting[C.SETTING_KEY_INBOXDOCID]
+                    // const hpath = await getHPathByID(value);
+                    // if (hpath) {
+                    //     showMessage(`${i18nHint["targetHint"]}${hpath}`, 0, "info");
+                    // }
+                    // const data = await sql(`SELECT box, path, hpath FROM blocks WHERE id="${value}" and type="d"`);
+                    // logger.logDebug(`checkTarget: ${JSON.stringify(data)}`);
+
+
                 }
             }
         });

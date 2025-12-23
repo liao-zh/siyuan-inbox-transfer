@@ -3,8 +3,8 @@ setting:
   inboxDocId:
     title: "Inbox Document ID"
     description: "Enter the ID of the document to use as the inbox."
-    hpathHint: "Inbox document path: "
-    hpathInvalid: "Invalid document ID, please check!"
+    targetHint: "Inbox document path: "
+    targetInvalid: "Invalid document ID, please check!"
   replaceBuiltIn:
     title: "Replace Built-in Inbox"
     description: "Enable to replace the built-in inbox panel and shortcut; disable to restore the built-in inbox."

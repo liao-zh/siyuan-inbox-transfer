@@ -7,8 +7,10 @@ import "@/index.scss";
 import HelloExample from "@/hello.svelte";
 import SettingExample from "@/setting-example.svelte";
 
-import { SettingManager } from "@/worker/settingManager";
-import { DockManager } from "@/worker/dockManager";
+import { FileManager } from "@/worker/fileManager";
+import { InboxManager } from "@/worker/inboxManager";
+import { SettingService } from "@/worker/settingService";
+import { DockService } from "@/worker/dockService";
 import { CONSTANTS as C } from "@/constants";
 import { setPluginInstance } from "@/utils/pluginInstance";
 import * as logger from "@/utils/logger";
@@ -22,9 +24,10 @@ const TAB_TYPE = "custom_tab";
 const DOCK_TYPE = "dock_tab";
 
 export default class PluginInboxLight extends Plugin {
-
-    private settingManager: SettingManager;
-    private dockManager: DockManager;
+    private fileManager: FileManager;
+    private inboxManager: InboxManager;
+    private settingService: SettingService;
+    private dockService: DockService;
 
     async onload() {
         logger.logInfo("加载插件");
@@ -35,8 +38,10 @@ export default class PluginInboxLight extends Plugin {
         setPluginInstance(this);
 
         // 设置插件设置
-        this.settingManager = new SettingManager(this);
-        this.dockManager = new DockManager(this);
+        this.fileManager = new FileManager(this);
+        this.inboxManager = new InboxManager(this);
+        this.settingService = new SettingService(this, this.fileManager);
+        this.dockService = new DockService(this);
 
 //         // 图标的制作参见帮助文档
 //         this.addIcons(`<symbol id="iconFace" viewBox="0 0 32 32">

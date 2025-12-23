@@ -3,8 +3,8 @@ setting:
   inboxDocId:
     title: "收集箱暂存文档ID"
     description: "填入作为收集箱暂存的文档的id。"
-    hpathHint: "收集箱暂存文档路径："
-    hpathInvalid: "无效的文档ID，请检查！"
+    targetHint: "收集箱暂存文档路径："
+    targetInvalid: "无效的文档ID，请检查！"
   replaceBuiltIn:
     title: "替换内置收集箱"
     description: "选项开启后，本插件会替换内置收集箱的面板和快捷键；关闭后，恢复内置收集箱。"
