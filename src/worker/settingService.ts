@@ -7,6 +7,9 @@ import * as logger from "@/utils/logger";
 
 /**
  * 管理插件设置
+ * @param plugin 插件实例
+ * @method load() 加载插件设置
+ * @method get(key) 获取插件设置项值
  */
 export class SettingService {
     private settingUtils: SettingUtils;
@@ -21,7 +24,7 @@ export class SettingService {
     /**
      * 初始化设置工具
      */
-    initSettingUtils() {
+    private initSettingUtils() {
         const i18nSetting = this.plugin.i18n.setting;
 
         // 设置工具初始化

@@ -1,9 +1,16 @@
 import { openTab, expandDocTree } from "siyuan";
 import PluginInboxLight from "@/index";
 import { request, sql, getNotebookConf, removeDoc } from "@/utils/api";
-import { CONSTANTS as C } from "@/constants";
 import * as logger from "@/utils/logger";
 
+/**
+ * 目标文档接口
+ * @property {string} id - 目标文档ID
+ * @property {string} notebookId - 目标文档笔记本ID
+ * @property {string} notebookName - 目标文档笔记本名称
+ * @property {string} path - 目标文档路径
+ * @property {string} hpath - 目标文档hpath
+ */
 export interface ITarget {
     id: string;
     notebookId: string;
@@ -23,9 +30,19 @@ export interface IChildDoc {
     path: string;
 }
 
+/**
+ * 目标文件管理器
+ * @param plugin 插件实例
+ * @attr targetIsValid - 目标文档是否有效
+ * @attr targetInfo {ITarget} - 目标文档信息
+ * @attr childDocs {IChildDoc[]} - 目标文档的子文档列表
+ * @method setTarget(targetId) 设置目标文档信息
+ * @method getChildDocs() 获取子文档列表
+ * @method removeChildDocs(childDocIds) 删除子文档列表
+ * @method openChildDocs(childDocIds) 打开子文档列表
+ */
 export class FileManager {
     private plugin: PluginInboxLight;
-    targetId: string = "";
     targetIsValid: boolean = false;
     targetInfo: null|ITarget = null;
     childDocs: IChildDoc[] = [];
@@ -39,8 +56,6 @@ export class FileManager {
      * @param targetId - 目标文档ID
      */
     async setTarget(targetId: string) {
-        // id
-        this.targetId = targetId;
         // 文档信息
         this.targetInfo = await this.getTargetInfo(targetId);
         // 文档是否有效
