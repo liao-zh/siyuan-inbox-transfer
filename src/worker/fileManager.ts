@@ -1,6 +1,7 @@
 import { openTab, expandDocTree } from "siyuan";
 import PluginInboxLight from "@/index";
 import { request, sql, getNotebookConf, removeDoc } from "@/utils/api";
+import { CONSTANTS as C } from "@/constants";
 import * as logger from "@/utils/logger";
 
 export interface ITarget {

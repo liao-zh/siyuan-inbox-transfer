@@ -1,7 +1,6 @@
 // 管理设置
 import { showMessage } from "siyuan";
 import PluginInboxLight from "@/index";
-import { FileManager } from "@/worker/fileManager";
 import { SettingUtils } from "@/libs/setting-utils";
 import { CONSTANTS as C } from "@/constants";
 import * as logger from "@/utils/logger";
@@ -11,17 +10,12 @@ import * as logger from "@/utils/logger";
  */
 export class SettingService {
     private settingUtils: SettingUtils;
-    // private plugin = getPluginInstance();
     private plugin: PluginInboxLight;
-    private fileManager: FileManager;
 
-    constructor(plugin: PluginInboxLight, fileManager: FileManager) {
+    constructor(plugin: PluginInboxLight) {
         this.plugin = plugin;
-        this.fileManager = fileManager;
         // 初始化设置
         this.initSettingUtils();
-        // 从存储加载设置
-        this.settingUtils.load();
     }
 
     /**
@@ -53,11 +47,11 @@ export class SettingService {
                     let value = await this.settingUtils.takeAndSave(C.SETTING_KEY_INBOXDOCID);
                     logger.logDebug(`设置：${C.SETTING_KEY_INBOXDOCID}`, value);
                     // 检查并设置目标id
-                    await this.fileManager.setTarget(value);
-                    await this.fileManager.getChildDocs();
+                    await this.plugin.fileManager.setTarget(value);
+                    await this.plugin.fileManager.getChildDocs();
                     // 提示结果
-                    if (this.fileManager.targetIsValid) {
-                        showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetHint"]}${this.fileManager.targetInfo.notebookName}/${this.fileManager.targetInfo.hpath}`, 2000, "info");
+                    if (this.plugin.fileManager.targetIsValid) {
+                        showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetHint"]}${this.plugin.fileManager.targetInfo.notebookName}/${this.plugin.fileManager.targetInfo.hpath}`, 2000, "info");
                         // logger.logDebug("childDocs", this.fileManager.childDocs);
                     } else {
                         showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetInvalid"]}`, 2000, "error");
@@ -100,6 +94,13 @@ export class SettingService {
                 }
             }
         });
+    }
+
+    /**
+     * 加载设置
+     */
+    async load() {
+        await this.settingUtils.load();
     }
 
     /**

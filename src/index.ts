@@ -4,9 +4,6 @@ import {
 } from "siyuan";
 import "@/index.scss";
 
-import HelloExample from "@/hello.svelte";
-import SettingExample from "@/setting-example.svelte";
-
 import { FileManager } from "@/worker/fileManager";
 import { InboxManager } from "@/worker/inboxManager";
 import { SettingService } from "@/worker/settingService";
@@ -19,15 +16,12 @@ import { SettingUtils } from "./libs/setting-utils";
 import { svelteDialog } from "./libs/dialog";
 import { mount, unmount } from "svelte";
 
-const STORAGE_NAME = "menu-config";
-const TAB_TYPE = "custom_tab";
-const DOCK_TYPE = "dock_tab";
 
 export default class PluginInboxLight extends Plugin {
-    private fileManager: FileManager;
-    private inboxManager: InboxManager;
-    private settingService: SettingService;
-    private dockService: DockService;
+    fileManager: FileManager;
+    inboxManager: InboxManager;
+    settingService: SettingService;
+    dockService: DockService;
 
     async onload() {
         logger.logInfo("加载插件");
@@ -35,13 +29,17 @@ export default class PluginInboxLight extends Plugin {
         this.data[C.SETTING_STORAGE] = { Check: true };
 
         // 设置插件实例
-        setPluginInstance(this);
+        // setPluginInstance(this);
 
-        // 设置插件设置
-        this.fileManager = new FileManager(this);
+        // 构建模块
+        this.settingService = new SettingService(this);
         this.inboxManager = new InboxManager(this);
-        this.settingService = new SettingService(this, this.fileManager);
+        this.fileManager = new FileManager(this);
         this.dockService = new DockService(this);
+
+        // 初始化
+        await this.settingService.load();
+        await this.fileManager.setTarget(this.settingService.get(C.SETTING_KEY_INBOXDOCID));
 
 //         // 图标的制作参见帮助文档
 //         this.addIcons(`<symbol id="iconFace" viewBox="0 0 32 32">
@@ -53,8 +51,10 @@ export default class PluginInboxLight extends Plugin {
 
     }
 
-    onLayoutReady() {
+    async onLayoutReady() {
         logger.logInfo("开启插件");
+
+        // this.inboxManager.getShorthands();
 
     }
 
