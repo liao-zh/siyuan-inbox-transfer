@@ -12,3 +12,5 @@ dock:
   title: "收集箱简化"
   locate: "在文档树中定位"
   inboxEmpty: "暂无收集箱条目"
+  selectAll: "全选"
+  unSelectAll: "取消全选"

@@ -24,7 +24,7 @@ export class DockService {
                 size: { width: 250, height: 0 },
                 icon: "iconInbox",
                 title: this.plugin.i18n.dock["title"],
-                hotkey: "⌥⌘W",
+                hotkey: "⇧⌥6",
             },
             data: {
                 text: "测试45"

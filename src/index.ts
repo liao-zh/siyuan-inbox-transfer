@@ -9,12 +9,7 @@ import { InboxManager } from "@/worker/inboxManager";
 import { SettingService } from "@/worker/settingService";
 import { DockService } from "@/worker/dockService";
 import { CONSTANTS as C } from "@/constants";
-import { setPluginInstance } from "@/utils/pluginInstance";
 import * as logger from "@/utils/logger";
-
-import { SettingUtils } from "./libs/setting-utils";
-import { svelteDialog } from "./libs/dialog";
-import { mount, unmount } from "svelte";
 
 
 export default class PluginInboxLight extends Plugin {
@@ -26,7 +21,8 @@ export default class PluginInboxLight extends Plugin {
     async onload() {
         logger.logInfo("加载插件");
 
-        this.data[C.SETTING_STORAGE] = { Check: true };
+        this.data[C.SETTING_STORAGE] = { readonlyText: "Readonly" };
+
 
         // 设置插件实例
         // setPluginInstance(this);
@@ -40,6 +36,7 @@ export default class PluginInboxLight extends Plugin {
         // 初始化
         await this.settingService.load();
         await this.fileManager.setTarget(this.settingService.get(C.SETTING_KEY_INBOXDOCID));
+        await this.fileManager.getChildDocs();
 
         // await this.inboxManager.updateAndMove();
 

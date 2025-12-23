@@ -12,3 +12,5 @@ dock:
   title: "Inbox Light"
   locate: "Locate in DocTree"
   inboxEmpty: "No items in the inbox."
+  selectAll: "Select All"
+  unSelectAll: "Undo Select All"
