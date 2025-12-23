@@ -1,13 +1,10 @@
 import { adaptHotkey } from "siyuan";
 import PluginInboxLight from "@/index";
-import DockComponent from "@/dock.svelte";
+import DockComponent from "@/dockComponent.svelte";
 import { mount } from "svelte";
 
 
-const DOCK_TYPE = "dock_tab";
-
-
-export class DockManager {
+export class DockService {
     private plugin: PluginInboxLight;
 
     constructor(plugin: PluginInboxLight) {
@@ -27,13 +24,9 @@ export class DockManager {
             data: {
                 text: "测试45"
             },
-            type: DOCK_TYPE,
-            resize() {
-                console.log(DOCK_TYPE + " resize");
-            },
-            update() {
-                console.log(DOCK_TYPE + " update");
-            },
+            type: "dock_tab",
+            resize() {},
+            update() {},
             init: (dock) => {
                 // 清空容器
                 dock.element.innerHTML = '';
@@ -48,9 +41,7 @@ export class DockManager {
                 });
 
             },
-            destroy() {
-                console.log("destroy dock:", DOCK_TYPE);
-            }
+            destroy() {},
         });
     }
 }
