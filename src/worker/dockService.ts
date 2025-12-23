@@ -3,6 +3,11 @@ import PluginInboxLight from "@/index";
 import DockComponent from "@/dockComponent.svelte";
 import { mount } from "svelte";
 
+export interface II18nDock {
+    title: string;
+    locate: string;
+    inboxEmpty: string;
+}
 
 export class DockService {
     private plugin: PluginInboxLight;
@@ -16,7 +21,7 @@ export class DockService {
         this.plugin.addDock({
             config: {
                 position: "LeftBottom",
-                size: { width: 200, height: 0 },
+                size: { width: 250, height: 0 },
                 icon: "iconInbox",
                 title: this.plugin.i18n.dock["title"],
                 hotkey: "⌥⌘W",
@@ -35,8 +40,7 @@ export class DockService {
                 const component = mount(DockComponent, {
                     target: dock.element,
                     props: {
-                        title: this.plugin.i18n.dock["title"],
-                        text: dock.data.text
+                        i18nDock: this.plugin.i18n.dock as unknown as II18nDock,
                     }
                 });
 

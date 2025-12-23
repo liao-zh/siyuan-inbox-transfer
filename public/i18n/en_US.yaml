@@ -10,3 +10,5 @@ setting:
     description: "Enable to replace the built-in inbox panel and shortcut; disable to restore the built-in inbox."
 dock:
   title: "Inbox Light"
+  locate: "Locate in DocTree"
+  inboxEmpty: "No items in the inbox."
