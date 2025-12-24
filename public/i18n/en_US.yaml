@@ -5,19 +5,25 @@ setting:
     description: "Enter the ID of the document to use as the inbox."
     targetHint: "Inbox document path: "
     targetInvalid: "Invalid document ID, please check!"
-  replaceBuiltIn:
-    title: "Replace Built-in Inbox"
-    description: "Enable to replace the built-in inbox panel and shortcut; disable to restore the built-in inbox."
   docTimePrefix:
     title: "Document Time Prefix"
     description: "Enable to add the time prefix 'YYYY-MM-DD HH:mm' to the document name when creating a new document from the inbox."
+  delOpConfirm:
+    title: "Confirm Delete Document"
+    description: "Enable to confirm delete when deleting documents."
   delAfterRefresh:
     title: "Delete Items After Refresh"
     description: "Enable to delete all items in the inbox that have been converted to documents after refreshing. Disabled by default, and enabled after stable use is recommended."
+  replaceBuiltIn:
+    title: "Replace Built-in Inbox"
+    description: "Enable to replace the built-in inbox panel and shortcut; disable to restore the built-in inbox."
 dock:
   title: "Inbox Light"
-  locate: "Locate in DocTree"
   targetInvalid: "Target document is invalid, please go to settings first!"
+  locate: "Locate in DocTree"
   inboxEmpty: "No items in the inbox."
   selectAll: "Select All"
   unSelectAll: "Undo Select All"
+common:
+  targetInvalid: "Target document is invalid, please go to settings first!"
+  deleteOpConfirmDesc: "Are you sure you want to delete the selected documents?"

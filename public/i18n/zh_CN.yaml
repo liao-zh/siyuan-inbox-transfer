@@ -5,19 +5,25 @@ setting:
     description: "填入作为收集箱暂存的文档的id。"
     targetHint: "收集箱暂存文档路径："
     targetInvalid: "无效的文档ID，请检查！"
-  replaceBuiltIn:
-    title: "替换内置收集箱"
-    description: "选项开启后，本插件会替换内置收集箱的面板和快捷键；关闭后，恢复内置收集箱。"
   docTimePrefix:
     title: "文档时间前缀"
     description: "选项开启后，从收集箱条目新建文档时文档名加上时间前缀'YYYY-MM-DD HH:mm'。"
+  delOpConfirm:
+    title: "文档删除确认"
+    description: "选项开启后，删除文档时会提示确认。"
   delAfterRefresh:
     title: "刷新后从收集箱中删除条目"
     description: "选项开启后，点击刷新后会从收集箱中删除所有已转换成文档的条目。默认不删除，使用稳定后建议选择删除。"
+  replaceBuiltIn:
+    title: "替换内置收集箱"
+    description: "选项开启后，本插件会替换内置收集箱的面板和快捷键；关闭后，恢复内置收集箱。"
 dock:
   title: "收集箱简化"
-  locate: "在文档树中定位"
   targetInvalid: "暂存文档无效，请先前往设置！"
+  locate: "在文档树中定位"
   inboxEmpty: "暂无收集箱条目"
   selectAll: "全选"
   unSelectAll: "取消全选"
+common:
+  targetInvalid: "暂存文档无效，请先前往设置！"
+  deleteOpConfirmDesc: "确认删除选中的文档吗？"

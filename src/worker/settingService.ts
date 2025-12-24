@@ -74,6 +74,17 @@ export class SettingService {
                 callback: () => this.actionCheckbox(C.SETTING_KEY_DOCTIMEPREFIX)
             }
         });
+        // 文档删除确认
+        this.settingUtils.addItem({
+            key: C.SETTING_KEY_DELOPCONFIRM,
+            value: true,
+            type: "checkbox",
+            title: i18nSetting[C.SETTING_KEY_DELOPCONFIRM]["title"],
+            description: i18nSetting[C.SETTING_KEY_DELOPCONFIRM]["description"],
+            action: {
+                callback: () => this.actionCheckbox(C.SETTING_KEY_DELOPCONFIRM)
+            }
+        });
         // 刷新后从收集箱中删除条目
         this.settingUtils.addItem({
             key: C.SETTING_KEY_DELAFTERREFRESH,

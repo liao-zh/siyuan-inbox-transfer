@@ -79,7 +79,7 @@ export class InboxManager {
         const targetIsValid = get(this.plugin.fileManager.targetIsValid);
         // 目标无效，不移动
         if (!targetIsValid) {
-            logger.logWarn("收集箱移动", this.plugin.i18n.dock["targetInvalid"]);
+            logger.logWarn("收集箱移动", this.plugin.i18n.common["targetInvalid"]);
         }
         // 移动所有文档
         else {
@@ -99,7 +99,7 @@ export class InboxManager {
         // 检查目标是否有效
         const targetIsValid = get(this.plugin.fileManager.targetIsValid);
         if (!targetIsValid) {
-            logger.logWarn("收集箱移动", this.plugin.i18n.dock["targetInvalid"]);
+            logger.logWarn("收集箱移动", this.plugin.i18n.common["targetInvalid"]);
             return;
         }
 

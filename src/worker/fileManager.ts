@@ -1,7 +1,8 @@
-import { openTab, type IEventBusMap } from "siyuan";
+import { openTab, type IEventBusMap, confirm } from "siyuan";
 import { writable, get } from "svelte/store";
 import PluginInboxLight from "@/index";
 import { request, sql, getNotebookConf, removeDoc } from "@/utils/api";
+import { CONSTANTS as C } from "@/constants";
 import * as logger from "@/utils/logger";
 
 /**
@@ -176,12 +177,23 @@ export class FileManager {
     async removeChildDocs(docIds: string[]) {
         // 目标文档无效，返回
         if (!get(this.targetIsValid)) {
-            logger.logWarn("删除子文档", this.plugin.i18n.dock["targetInvalid"]);
+            logger.logWarn("删除子文档", this.plugin.i18n.common["targetInvalid"]);
         }
         else {
             // 删除多个子文档
-            logger.logDebug("删除子文档", docIds);
-            await Promise.all(docIds.map(docId => this.removeChildDoc(docId)));
+            if (this.plugin.settingService.get(C.SETTING_KEY_DELOPCONFIRM)) {
+                confirm(
+                    window.siyuan.languages.deleteOpConfirm,
+                    this.plugin.i18n.common["deleteOpConfirmDesc"],
+                    async () => {
+                        logger.logDebug("删除子文档", docIds);
+                        await Promise.all(docIds.map(docId => this.removeChildDoc(docId)));
+                    }
+                )
+            } else {
+                logger.logDebug("删除子文档", docIds);
+                await Promise.all(docIds.map(docId => this.removeChildDoc(docId)));
+            }
         }
     }
 
