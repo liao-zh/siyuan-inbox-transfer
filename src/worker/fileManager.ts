@@ -34,9 +34,9 @@ export interface IChildDoc {
 /**
  * 目标文件管理器
  * @param plugin 插件实例
- * @attr targetIsValid - 目标文档是否有效
+ * @attr targetIsValid {writable<boolean>} - 目标文档是否有效
  * @attr targetInfo {ITarget} - 目标文档信息
- * @attr childDocs {IChildDoc[]} - 目标文档的子文档列表
+ * @attr childDocs {writable<IChildDoc[]>} - 目标文档的子文档列表
  * @method setTarget(targetId) 设置目标文档信息
  * @method bindHandler() 绑定需要更新子文档列表的事件处理器
  * @method unbindHandler() 解绑事件处理器
@@ -46,10 +46,8 @@ export interface IChildDoc {
  */
 export class FileManager {
     private plugin: PluginInboxLight;
-    // targetIsValid: boolean = false;
     targetIsValid = writable<boolean>(false);
     targetInfo: null|ITarget = null;
-    // childDocs: IChildDoc[] = [];
     childDocs = writable<IChildDoc[]>([]);
     private updateHandlerRef = this.updateHandler.bind(this);
 
@@ -66,10 +64,8 @@ export class FileManager {
         this.targetInfo = await this.getTargetInfo(targetId);
         // 文档是否有效
         if (this.targetInfo) {
-            // this.targetIsValid = true;
             this.targetIsValid.set(true);
         } else {
-            // this.targetIsValid = false;
             this.targetIsValid.set(false);
         }
         logger.logDebug("设置目标路径", this.targetInfo);
@@ -134,9 +130,6 @@ export class FileManager {
      */
     async updateChildDocs() {
         // 目标文档无效，返回空列表
-        // if (!this.targetIsValid) {
-        //     this.childDocs = [];
-        // }
         if (!get(this.targetIsValid) || !this.targetInfo) {
             this.childDocs.set([]);
             return;
@@ -151,12 +144,6 @@ export class FileManager {
             }
         );
         // 提取子文档的信息
-        // this.childDocs = data.files.map(item => ({
-        //     name: item.name.replace(/\.sy$/, ''),
-        //     id: item.id,
-        //     path: item.path
-        // }));
-        // logger.logDebug("获取文档列表", this.childDocs);
         this.childDocs.set(data.files.map(item => ({
             name: item.name.replace(/\.sy$/, ''),
             id: item.id,

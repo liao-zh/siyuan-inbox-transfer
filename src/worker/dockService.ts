@@ -1,13 +1,7 @@
-import { adaptHotkey } from "siyuan";
 import PluginInboxLight from "@/index";
 import DockComponent from "@/dockComponent.svelte";
 import { mount } from "svelte";
-
-// export interface II18nDock {
-//     title: string;
-//     locate: string;
-//     inboxEmpty: string;
-// }
+import { adaptHotkey } from "siyuan";
 
 export class DockService {
     private plugin: PluginInboxLight;
@@ -24,7 +18,7 @@ export class DockService {
                 size: { width: 250, height: 0 },
                 icon: "iconInbox",
                 title: this.plugin.i18n.dock["title"],
-                hotkey: "⇧⌥6",
+                hotkey: adaptHotkey("⇧⌥6"),
             },
             data: {},
             type: "dock_tab",

@@ -23,10 +23,6 @@ export default class PluginInboxLight extends Plugin {
 
         this.data[C.SETTING_STORAGE] = { readonlyText: "Readonly" };
 
-
-        // 设置插件实例
-        // setPluginInstance(this);
-
         // 构建模块
         this.settingService = new SettingService(this);
         this.inboxManager = new InboxManager(this);

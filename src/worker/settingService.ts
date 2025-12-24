@@ -60,27 +60,6 @@ export class SettingService {
                     } else {
                         showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetInvalid"]}`, 2000, "error");
                     }
-                    // // 尝试更新描述文本，但不大成功
-                    // const textElem = document.querySelector('div.b3-label__text');
-                    // logger.logDebug(`textElem: ${textElem?.innerHTML}`)
-                    // const hint = i18nSetting[C.SETTING_KEY_INBOXDOCID]
-                    // if (textElem && textElem.innerHTML.includes(hint["description"])) {
-                    //     const hpath = await getHPathByID(value);
-                    //     if (hpath) {
-                    //         textElem.innerHTML = `${hint["description"]} ${hint["targetHint"]}${hpath}`;
-                    //     } else {
-                    //         textElem.innerHTML = `${hint["description"]} ${hint["targetHint"]}${hint["hpathInvaid"]}`;
-                    //     }
-                    // }
-                    // const i18nHint = i18nSetting[C.SETTING_KEY_INBOXDOCID]
-                    // const hpath = await getHPathByID(value);
-                    // if (hpath) {
-                    //     showMessage(`${i18nHint["targetHint"]}${hpath}`, 0, "info");
-                    // }
-                    // const data = await sql(`SELECT box, path, hpath FROM blocks WHERE id="${value}" and type="d"`);
-                    // logger.logDebug(`checkTarget: ${JSON.stringify(data)}`);
-
-
                 }
             }
         });
