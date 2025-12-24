@@ -18,7 +18,7 @@ setting:
     title: "Replace Built-in Inbox"
     description: "Enable to replace the built-in inbox panel and shortcut. Disable to restore the built-in inbox."
 dock:
-  title: "Inbox Transfer Station"
+  title: "Inbox Transfer"
   targetInvalid: "Target transfer station is invalid. Please go to settings first!"
   locate: "Locate in DocTree"
   inboxEmpty: "No items in the inbox."

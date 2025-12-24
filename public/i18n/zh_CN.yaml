@@ -18,7 +18,7 @@ setting:
     title: "替换内置收集箱"
     description: "选项开启后，本插件会替换内置收集箱的面板和快捷键。关闭后，恢复内置收集箱。"
 dock:
-  title: "收集箱中转站"
+  title: "收集中转站"
   targetInvalid: "中转路径无效，请先前往设置！"
   locate: "在文档树中定位路径"
   inboxEmpty: "暂无收集箱条目"

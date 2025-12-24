@@ -15,21 +15,21 @@ export class DockService {
         this.plugin.addDock({
             config: {
                 position: "LeftBottom",
-                size: { width: 200, height: 0 },
+                size: { width: 300, height: 300 },
                 icon: "iconInbox",
                 title: this.plugin.i18n.dock["title"],
-                hotkey: adaptHotkey("⇧⌥6"),
+                // hotkey: adaptHotkey("⇧⌥6"),
             },
             data: {
                 plugin: this.plugin,
             },
-            type: "dock_tab",
+            type: ":dock_tab",
             resize() {},
             update() {},
             init() {
                 // 清空容器
                 this.element.innerHTML = '';
-                // 使用Svelte组件
+                // 加载svelte组件
                 mount(DockComponent, {
                     target: this.element,
                     props: {
