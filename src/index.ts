@@ -47,7 +47,6 @@ export default class PluginInboxLight extends Plugin {
         await this.fileManager.setTarget(this.settingService.get(C.SETTING_KEY_INBOXDOCID));
         this.fileManager.bindHandler();
         await this.fileManager.updateChildDocs();
-        // await this.inboxManager.updateAndMove();
 
     }
 

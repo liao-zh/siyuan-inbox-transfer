@@ -43,7 +43,10 @@ export class InboxManager {
         await this.getShorthands();
         // 对所有收集箱条目创建文档
         await this.moveShorthands();
-        // await this.removeShorthands();
+        // 删除所有收集箱条目
+        if (this.plugin.settingService.get(C.SETTING_KEY_DELAFTERREFRESH)) {
+            await this.removeShorthands();
+        }
     }
 
     /**

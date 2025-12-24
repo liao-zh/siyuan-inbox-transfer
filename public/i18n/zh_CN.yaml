@@ -11,6 +11,9 @@ setting:
   docTimePrefix:
     title: "文档时间前缀"
     description: "选项开启后，从收集箱条目新建文档时文档名加上时间前缀'YYYY-MM-DD HH:mm'。"
+  delAfterRefresh:
+    title: "刷新后从收集箱中删除条目"
+    description: "选项开启后，点击刷新后会从收集箱中删除所有已转换成文档的条目。默认不删除，使用稳定后建议选择删除。"
 dock:
   title: "收集箱简化"
   locate: "在文档树中定位"

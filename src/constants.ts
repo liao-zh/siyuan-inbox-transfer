@@ -8,6 +8,7 @@ export class CONSTANTS {
     public static readonly SETTING_STORAGE_HEIGHT: string = "400px";
     public static readonly SETTING_KEY_INBOXDOCID: string = "inboxDocId";
     public static readonly SETTING_KEY_DOCTIMEPREFIX: string = "docTimePrefix";
+    public static readonly SETTING_KEY_DELAFTERREFRESH: string = "delAfterRefresh";
     public static readonly SETTING_KEY_REPLACEBUILTIN: string = "replaceBuiltIn";
 
     // HTML元素样式

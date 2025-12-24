@@ -71,11 +71,18 @@ export class SettingService {
             title: i18nSetting[C.SETTING_KEY_DOCTIMEPREFIX]["title"],
             description: i18nSetting[C.SETTING_KEY_DOCTIMEPREFIX]["description"],
             action: {
-                callback: () => {
-                    let value = !this.settingUtils.get(C.SETTING_KEY_DOCTIMEPREFIX);
-                    this.settingUtils.setAndSave(C.SETTING_KEY_DOCTIMEPREFIX, value);
-                    logger.logDebug(`设置：${C.SETTING_KEY_DOCTIMEPREFIX}`, value);
-                }
+                callback: () => this.actionCheckbox(C.SETTING_KEY_DOCTIMEPREFIX)
+            }
+        });
+        // 刷新后从收集箱中删除条目
+        this.settingUtils.addItem({
+            key: C.SETTING_KEY_DELAFTERREFRESH,
+            value: false, // 默认不删除，使用稳定后应设为删除
+            type: "checkbox",
+            title: i18nSetting[C.SETTING_KEY_DELAFTERREFRESH]["title"],
+            description: i18nSetting[C.SETTING_KEY_DELAFTERREFRESH]["description"],
+            action: {
+                callback: () => this.actionCheckbox(C.SETTING_KEY_DELAFTERREFRESH)
             }
         });
         // 替换内置收集箱
@@ -86,14 +93,16 @@ export class SettingService {
             title: i18nSetting[C.SETTING_KEY_REPLACEBUILTIN]["title"],
             description: i18nSetting[C.SETTING_KEY_REPLACEBUILTIN]["description"],
             action: {
-                callback: () => {
-                    let value = !this.settingUtils.get(C.SETTING_KEY_REPLACEBUILTIN);
-                    this.settingUtils.setAndSave(C.SETTING_KEY_REPLACEBUILTIN, value);
-                    logger.logDebug(`设置：${C.SETTING_KEY_REPLACEBUILTIN}`, value);
-                }
+                callback: () => this.actionCheckbox(C.SETTING_KEY_REPLACEBUILTIN)
             }
         });
 
+    }
+
+    private actionCheckbox(key: string) {
+        let value = !this.settingUtils.get(key);
+        this.settingUtils.setAndSave(key, value);
+        logger.logDebug(`设置：${key}`, value);
     }
 
     /**

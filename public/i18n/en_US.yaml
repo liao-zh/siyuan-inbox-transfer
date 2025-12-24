@@ -11,6 +11,9 @@ setting:
   docTimePrefix:
     title: "Document Time Prefix"
     description: "Enable to add the time prefix 'YYYY-MM-DD HH:mm' to the document name when creating a new document from the inbox."
+  delAfterRefresh:
+    title: "Delete Items After Refresh"
+    description: "Enable to delete all items in the inbox that have been converted to documents after refreshing. Disabled by default, and enabled after stable use is recommended."
 dock:
   title: "Inbox Light"
   locate: "Locate in DocTree"
