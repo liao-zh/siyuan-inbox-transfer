@@ -1,29 +1,29 @@
 ---
 setting:
   inboxDocId:
-    title: "Inbox Document ID"
-    description: "Enter the ID of the document to use as the inbox."
-    targetHint: "Inbox document path: "
+    title: "Inbox Transfer Station ID"
+    description: "Enter the ID of the document to use as the inbox transfer station."
+    targetHint: "Inbox transfer station path: "
     targetInvalid: "Invalid document ID, please check!"
   docTimePrefix:
     title: "Document Time Prefix"
     description: "Enable to add the time prefix 'YYYY-MM-DD HH:mm' to the document name when creating a new document from the inbox."
   delOpConfirm:
-    title: "Confirm Delete Document"
-    description: "Enable to confirm delete when deleting documents."
+    title: "Confirm Document Deletion"
+    description: "Enable to confirm deletion of documents. Disable for a faster workflow."
   delAfterRefresh:
     title: "Delete Items After Refresh"
-    description: "Enable to delete all items in the inbox that have been converted to documents after refreshing. Disabled by default, and enabled after stable use is recommended."
+    description: "Enable to delete all items in the inbox that have been transfered after refreshing. Enable for a faster workflow."
   replaceBuiltIn:
     title: "Replace Built-in Inbox"
-    description: "Enable to replace the built-in inbox panel and shortcut; disable to restore the built-in inbox."
+    description: "Enable to replace the built-in inbox panel and shortcut. Disable to restore the built-in inbox."
 dock:
-  title: "Inbox Light"
-  targetInvalid: "Target document is invalid, please go to settings first!"
-  locate: "Locate (need to open DocTree manually)"
+  title: "Inbox Transfer Station"
+  targetInvalid: "Target transfer station is invalid. Please go to settings first!"
+  locate: "Locate in DocTree"
   inboxEmpty: "No items in the inbox."
   selectAll: "Select All"
   unSelectAll: "Undo Select All"
 common:
-  targetInvalid: "Target document is invalid, please go to settings first!"
+  targetInvalid: "Target transfer station is invalid. Please go to settings first!"
   deleteOpConfirmDesc: "Are you sure you want to delete the selected documents?"
