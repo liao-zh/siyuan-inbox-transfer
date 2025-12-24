@@ -35,8 +35,11 @@ export class InboxManager {
      * @returns 无
      */
     async updateAndMove() {
+        // 清空收集箱条目
         this.shorthands = [];
+        // 获取所有收集箱条目
         await this.getShorthands();
+        // 对所有收集箱条目创建文档
         await this.moveShorthands();
         // await this.removeShorthands();
     }

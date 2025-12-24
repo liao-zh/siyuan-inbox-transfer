@@ -194,8 +194,6 @@ export class FileManager {
         // 删除多个子文档
         logger.logDebug("删除文档", docIds);
         await Promise.all(docIds.map(docId => this.removeChildDoc(docId)));
-        // // 更新子文档列表
-        // await this.updateChildDocs();
     }
 
     /**

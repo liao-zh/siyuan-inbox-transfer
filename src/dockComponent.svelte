@@ -104,9 +104,9 @@
     }
 </script>
 
-<div class="fn__flex-column file-tree sy__inbox">
+<div class="fn__flex-column file-tree sy__inbox" style="height: 100%; overflow: hidden;">
     <!-- dock顶栏 -->
-    <div class="block__icons">
+    <div class="block__icons" style="flex-shrink: 0;">
         <!-- logo和标题 -->
         <div class="block__logo">
             <svg class="block__logoicon"><use xlink:href="#iconInbox"></use></svg>
@@ -163,7 +163,7 @@
         </span>
     </div>
     <!-- 文档列表 -->
-    <div class="fn__flex-column">
+    <div class="fn__flex-column" style="flex: 1; overflow-y: auto;">
         <ul class="b3-list b3-list--background">
             <!-- 空列表, 显示提示 -->
             {#if docs.length === 0}
