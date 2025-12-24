@@ -104,15 +104,32 @@
     // 定位
     function locateHandler(event: MouseEvent) {
         event.stopPropagation();
-        // 打开文档树栏
-        // document.querySelector('.file-tree')?.classList.add('layout__tab--active');
+        event.preventDefault();
+
+        // 打开文档树面板
+        // 尝试每个dock位置
+        let success = false;
+        const posList = ["leftDock", "rightDock", "bottomDock"];
+        for (const pos of posList) {
+            if (window.siyuan.layout[pos].data.hasOwnProperty("file")) {
+                // 函数：toggleModel(type, show, close, hide, isSaveLayout)
+                window.siyuan.layout[pos].toggleModel("file", true, false, false);
+                success = true;
+            }
+        }
+        if (!success) {
+            logger.logWarn("未定位到文档树面板，请手动打开");
+        }
+
         // 定位选中的文档
-        expandDocTree({id: plugin.fileManager.targetInfo.id, isSetCurrent: true});
+        expandDocTree({ id: plugin.fileManager.targetInfo.id, isSetCurrent: true });
     }
 
     // 单个列表项事件
     function itemHandler(event: MouseEvent) {
         event.stopPropagation();
+        event.preventDefault();
+
         // 获取元素和数据
         const target = event.target as Element;
         const docId = (event.currentTarget as HTMLElement).dataset.id as string;
