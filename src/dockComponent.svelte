@@ -249,7 +249,7 @@
     .block__icon.refreshing svg {
         animation: rotate 2s linear infinite;
         transform-origin: center;
-        animation-delay: 0.5s; /* 给浏览器一点准备时间，否则刚开始时旋转有些飘 */
+        animation-delay: 0.5s; /* 给一点准备时间，否则刚开始时旋转有些飘 */
         transform: rotate(0deg);
     }
 
