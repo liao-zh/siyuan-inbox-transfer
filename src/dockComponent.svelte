@@ -3,10 +3,11 @@
  Description  : Dock component for inbox light plugin
 -->
 <script lang="ts">
-    import { adaptHotkey } from "siyuan";
+    import { adaptHotkey, expandDocTree } from "siyuan";
     import { onDestroy } from 'svelte';
     import PluginInboxLight from "@/index";
     import { type IChildDoc } from "@/worker/fileManager";
+    import { CONSTANTS as C } from "@/constants";
     import * as logger from "@/utils/logger";
 
     // 组件属性
@@ -100,6 +101,14 @@
         // 删除后取消选中
         unSelectAll();
     }
+    // 定位
+    function locateHandler(event: MouseEvent) {
+        event.stopPropagation();
+        // 打开文档树栏
+        // document.querySelector('.file-tree')?.classList.add('layout__tab--active');
+        // 定位选中的文档
+        expandDocTree({id: plugin.fileManager.targetInfo.id, isSetCurrent: true});
+    }
 
     // 单个列表项事件
     function itemHandler(event: MouseEvent) {
@@ -135,12 +144,9 @@
 
 <div class="fn__flex-column file-tree sy__inbox" style="height: 100%; overflow: hidden;">
     <!-- dock顶栏 -->
-    <div class="block__icons" style="flex-shrink: 0;">
-        <!-- logo和标题 -->
-        <div class="block__logo">
-            <svg class="block__logoicon"><use xlink:href="#iconInbox"></use></svg>
-            {i18nDock["title"]}
-        </div>
+    <div class="block__icons" style="flex-shrink: 0; overflow-x: auto; white-space: nowrap;">
+        <!-- 标题 -->
+        <div class="block__logo">{i18nDock["title"]}</div>
         <span class="fn__flex-1"></span>
         <!-- 目标有效时才显示功能按钮 -->
         {#if targetIsValid}
@@ -150,6 +156,7 @@
             class="block__icon b3-tooltips b3-tooltips__w"
             class:refreshing={isRefreshing}
             disabled={isRefreshing}
+            style="{isRefreshing ? 'opacity: ' + C.STYLE_DISABLED_OPACITY + ';' + 'cursor: default; pointer-events: none;' : ''}"
             aria-label="{window.siyuan.languages.refresh}"
             onclick={refreshHandler}>
             <svg><use xlink:href="#iconRefresh"></use></svg>
@@ -180,12 +187,12 @@
         </button>
         <!-- 定位 -->
         <span class="fn__space"></span>
-        <span
-            data-type="locate"
+        <button
             class="block__icon b3-tooltips b3-tooltips__w"
-            aria-label="{i18nDock["locate"]}">
+            aria-label="{i18nDock["locate"]}"
+            onclick={locateHandler}>
             <svg><use xlink:href="#iconFocus"></use></svg>
-        </span>
+        </button>
         {/if}
         <!-- 最小化 -->
         <span class="fn__space"></span>
@@ -201,10 +208,10 @@
         <ul class="b3-list b3-list--background">
             <!-- 目标无效 -->
             {#if !targetIsValid}
-            <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["targetInvalid"]}</li>
+            <li class="b3-list--empty" style="opacity: {C.STYLE_DISABLED_OPACITY};">{i18nDock["targetInvalid"]}</li>
             <!-- 空列表 -->
             {:else if docs.length === 0}
-                <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["inboxEmpty"]}</li>
+                <li class="b3-list--empty" style="opacity: {C.STYLE_DISABLED_OPACITY};">{i18nDock["inboxEmpty"]}</li>
             {:else}
             {#each docs as doc (doc.id)}
                     <!-- 列表项 -->
@@ -253,12 +260,5 @@
         to {
             transform: rotate(360deg);
         }
-    }
-
-    /* 刷新按钮禁用状态样式 */
-    .block__icon.refreshing {
-        opacity: 0.5;
-        cursor: default;
-        pointer-events: none;
     }
 </style>

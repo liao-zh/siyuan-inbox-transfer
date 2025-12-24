@@ -14,24 +14,26 @@ export class DockService {
     initDock() {
         this.plugin.addDock({
             config: {
-                position: "LeftTop",
-                size: { width: 250, height: 0 },
+                position: "LeftBottom",
+                size: { width: 200, height: 0 },
                 icon: "iconInbox",
                 title: this.plugin.i18n.dock["title"],
                 hotkey: adaptHotkey("⇧⌥6"),
             },
-            data: {},
+            data: {
+                plugin: this.plugin,
+            },
             type: "dock_tab",
             resize() {},
             update() {},
-            init: (dock) => {
+            init() {
                 // 清空容器
-                dock.element.innerHTML = '';
+                this.element.innerHTML = '';
                 // 使用Svelte组件
                 mount(DockComponent, {
-                    target: dock.element,
+                    target: this.element,
                     props: {
-                        plugin: this.plugin,
+                        plugin: this.data.plugin,
                     }
                 });
             },

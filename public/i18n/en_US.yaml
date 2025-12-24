@@ -20,7 +20,7 @@ setting:
 dock:
   title: "Inbox Light"
   targetInvalid: "Target document is invalid, please go to settings first!"
-  locate: "Locate in DocTree"
+  locate: "Locate (need to open DocTree manually)"
   inboxEmpty: "No items in the inbox."
   selectAll: "Select All"
   unSelectAll: "Undo Select All"

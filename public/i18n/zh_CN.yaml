@@ -20,7 +20,7 @@ setting:
 dock:
   title: "收集箱简化"
   targetInvalid: "暂存文档无效，请先前往设置！"
-  locate: "在文档树中定位"
+  locate: "定位（需手动打开文档树）"
   inboxEmpty: "暂无收集箱条目"
   selectAll: "全选"
   unSelectAll: "取消全选"
