@@ -45,7 +45,7 @@ export class FileManager {
     private plugin: PluginInboxLight;
     targetIsValid: boolean = false;
     targetInfo: null|ITarget = null;
-    childDocs: IChildDoc[] = []; // 列表使用非替换的方式更新，便于在svelte中引用
+    childDocs: IChildDoc[] = [];
 
     constructor(plugin: PluginInboxLight) {
         this.plugin = plugin;
@@ -172,13 +172,7 @@ export class FileManager {
      * @returns 无
      */
     openChildDocs(docIds: string[], event: MouseEvent) {
-        // 阻止事件其他行为
-        event.stopPropagation();
-        event.preventDefault();
-
-        // log
         logger.logDebug("打开文档", docIds);
-
         // 同时打开多个文档
         docIds.forEach((docId, index) => {
             // 延迟打开，避免同时打开过多标签页导致性能问题

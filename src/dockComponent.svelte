@@ -48,23 +48,46 @@
         selectedIds = new Set();
     }
 
-    // 处理操作
+    // 整体事件
     // 刷新
-    async function refreshHandler() {
+    async function refreshHandler(event: MouseEvent) {
+        event.stopPropagation();
         await plugin.inboxManager.updateAndMove();
         await plugin.fileManager.getChildDocs();
     }
     // 打开
     function openHandler(event: MouseEvent) {
+        event.stopPropagation();
+        // 打开选中的文档
         plugin.fileManager.openChildDocs(Array.from(selectedIds), event);
+        // 打开后取消选中
         unSelectAll();
     }
     // 删除
-    async function deleteHandler() {
+    async function deleteHandler(event: MouseEvent) {
+        event.stopPropagation();
+        // 删除选中的文档
         await plugin.fileManager.removeChildDocs(Array.from(selectedIds));
+        // 删除后取消选中
         unSelectAll();
         logger.logDebug("删除文档", Array.from(selectedIds));
         logger.logDebug("删除文档后", docs);
+    }
+
+    // 单个列表项事件
+    function itemHandler(event: MouseEvent) {
+        event.stopPropagation();
+        // 获取元素和数据
+        const target = event.target as Element;
+        const docId = (event.currentTarget as HTMLElement).dataset.id as string;
+        // 点击了checkbox区域，切换选中状态
+        if (target.closest('.b3-list-item__action')) {
+            toggleSelect(docId);
+        }
+        // 点击了文本区域，打开文档
+        else if (target.closest('.b3-list-item__text')) {
+            plugin.fileManager.openChildDocs([docId], event);
+        }
     }
 </script>
 
@@ -82,7 +105,7 @@
         <button
             class="block__icon b3-tooltips b3-tooltips__w"
             aria-label="{window.siyuan.languages.refresh}"
-            onclick={async () => refreshHandler()}>
+            onclick={refreshHandler}>
             <svg><use xlink:href="#iconRefresh"></use></svg>
         </button>
         <span class="fn__space"></span>
@@ -98,7 +121,7 @@
         <button
             class="block__icon b3-tooltips b3-tooltips__w"
             aria-label="{window.siyuan.languages.openBy}"
-            onclick={(event) => openHandler(event)}>
+            onclick={openHandler}>
             <svg><use xlink:href="#iconOpen"></use></svg>
         </button>
         <span class="fn__space"></span>
@@ -106,7 +129,7 @@
         <button
             class="block__icon b3-tooltips b3-tooltips__w"
             aria-label="{window.siyuan.languages.delete}"
-            onclick={async () => deleteHandler()}>
+            onclick={deleteHandler}>
             <svg><use xlink:href="#iconTrashcan"></use></svg>
         </button>
         <span class="fn__space"></span>
@@ -129,32 +152,32 @@
     <!-- 文档列表 -->
     <div class="fn__flex-column">
         <ul class="b3-list b3-list--background">
+            <!-- 空列表, 显示提示 -->
             {#if docs.length === 0}
                 <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["inboxEmpty"]}</li>
             {:else}
-                {#each docs as doc (doc.id)}
+            {#each docs as doc (doc.id)}
+                    <!-- 列表项，在li元素绑定事件，统一处理在checkbox和文本处点击的不同行为 -->
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
                     <li
                         class="b3-list-item"
                         data-id="{doc.id}"
-                        class:b3-list-item--focus={selectedIds.has(doc.id)}>
-                        <!-- svelte-ignore a11y_click_events_have_key_events -->
-                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        class:b3-list-item--focus={selectedIds.has(doc.id)}
+                        onclick={itemHandler}>
                         <span
                             class="b3-list-item__action"
                             role="checkbox"
                             tabindex="0"
                             aria-checked={selectedIds.has(doc.id)}
-                            aria-label="{window.siyuan.languages.select}"
-                            onclick={() => toggleSelect(doc.id)}>
+                            aria-label="{window.siyuan.languages.select}">
                             <svg><use xlink:href="#icon{selectedIds.has(doc.id) ? 'Check' : 'Uncheck'}"></use></svg>
                         </span>
                         <span class="fn__space--small"></span>
-                        <!-- svelte-ignore a11y_click_events_have_key_events -->
-                        <!-- svelte-ignore a11y_no_static_element_interactions -->
                         <span
                             class="b3-list-item__text"
-                            title="{doc.name}"
-                            onclick={(event) => plugin.fileManager.openChildDocs([doc.id], event)}>
+                            title="{doc.name}">
                             {doc.name}
                         </span>
                     </li>
