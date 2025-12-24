@@ -80,7 +80,6 @@
             await plugin.fileManager.updateChildDocs();
             // 更新并移动收集箱条目
             await plugin.inboxManager.updateAndMove();
-            logger.logDebug("更新文档后", docs);
         } finally {
             isRefreshing = false;
         }
