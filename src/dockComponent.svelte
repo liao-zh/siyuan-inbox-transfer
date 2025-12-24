@@ -4,6 +4,7 @@
 -->
 <script lang="ts">
     import { adaptHotkey } from "siyuan";
+    import { onDestroy } from 'svelte';
     import PluginInboxLight from "@/index";
     import { type IChildDoc } from "@/worker/fileManager";
     import * as logger from "@/utils/logger";
@@ -15,19 +16,23 @@
     let i18nDock = $derived(plugin.i18n.dock);
     // 文档列表变量与监听
     let docs = $state<IChildDoc[]>([]);
+    let cleanupDocs: (() => void) | null = null;
     $effect(() => {
         const unsubscribe = plugin.fileManager.childDocs.subscribe(value => {
             docs = value;
         });
+        cleanupDocs = unsubscribe; // 保存清理函数
         return unsubscribe; // 清理函数
     });
 
     // 目标存在性变量和监听
     let targetIsValid = $state(false);
+    let cleanupTarget: (() => void) | null = null;
     $effect(() => {
         const unsubscribe = plugin.fileManager.targetIsValid.subscribe(value => {
             targetIsValid = value;
         });
+        cleanupTarget = unsubscribe; // 保存清理函数
         return unsubscribe; // 清理函数
     });
 
@@ -110,6 +115,21 @@
             plugin.fileManager.openChildDocs([docId], event);
         }
     }
+
+    // 组件销毁时的清理
+    onDestroy(() => {
+        // 清理文档列表订阅
+        if (cleanupDocs) {
+            cleanupDocs();
+            cleanupDocs = null;
+        }
+        // 清理目标有效性订阅
+        if (cleanupTarget) {
+            cleanupTarget();
+            cleanupTarget = null;
+        }
+        logger.logDebug('Dock组件已销毁');
+    });
 </script>
 
 <div class="fn__flex-column file-tree sy__inbox" style="height: 100%; overflow: hidden;">

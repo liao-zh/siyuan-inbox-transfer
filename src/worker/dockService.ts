@@ -20,30 +20,26 @@ export class DockService {
     initDock() {
         this.plugin.addDock({
             config: {
-                position: "LeftBottom",
+                position: "LeftTop",
                 size: { width: 250, height: 0 },
                 icon: "iconInbox",
                 title: this.plugin.i18n.dock["title"],
                 hotkey: "⇧⌥6",
             },
-            data: {
-                text: "测试45"
-            },
+            data: {},
             type: "dock_tab",
             resize() {},
             update() {},
             init: (dock) => {
                 // 清空容器
                 dock.element.innerHTML = '';
-
                 // 使用Svelte组件
-                const component = mount(DockComponent, {
+                mount(DockComponent, {
                     target: dock.element,
                     props: {
                         plugin: this.plugin,
                     }
                 });
-
             },
             destroy() {},
         });
