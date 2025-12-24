@@ -46,11 +46,12 @@ export interface IChildDoc {
  */
 export class FileManager {
     private plugin: PluginInboxLight;
-    targetIsValid: boolean = false;
+    // targetIsValid: boolean = false;
+    targetIsValid = writable<boolean>(false);
     targetInfo: null|ITarget = null;
     // childDocs: IChildDoc[] = [];
     childDocs = writable<IChildDoc[]>([]);
-    private refreshHandlerRef = this.refreshHandler.bind(this);
+    private updateHandlerRef = this.updateHandler.bind(this);
 
     constructor(plugin: PluginInboxLight) {
         this.plugin = plugin;
@@ -65,9 +66,11 @@ export class FileManager {
         this.targetInfo = await this.getTargetInfo(targetId);
         // 文档是否有效
         if (this.targetInfo) {
-            this.targetIsValid = true;
+            // this.targetIsValid = true;
+            this.targetIsValid.set(true);
         } else {
-            this.targetIsValid = false;
+            // this.targetIsValid = false;
+            this.targetIsValid.set(false);
         }
         logger.logDebug("设置目标路径", this.targetInfo);
     }
@@ -102,21 +105,21 @@ export class FileManager {
      * 绑定事件处理器
     */
     bindHandler() {
-        this.plugin.eventBus.on("ws-main", this.refreshHandlerRef);
+        this.plugin.eventBus.on("ws-main", this.updateHandlerRef);
     }
 
     /**
      * 解绑事件处理器
      */
     unbindHandler() {
-        this.plugin.eventBus.off("ws-main", this.refreshHandlerRef);
+        this.plugin.eventBus.off("ws-main", this.updateHandlerRef);
     }
 
     /**
      * 发生事件时更新子文档列表
      * @param event - 主WebSocket事件
      */
-    async refreshHandler(event: CustomEvent<IEventBusMap["ws-main"]>) {
+    async updateHandler(event: CustomEvent<IEventBusMap["ws-main"]>) {
         // logger.logDebug("ws-main事件：", event.detail.cmd);
         const cmdTypes = ["create", "removeDoc", "moveDoc", "rename"];
         if (cmdTypes.includes(event.detail.cmd)) {
@@ -134,7 +137,7 @@ export class FileManager {
         // if (!this.targetIsValid) {
         //     this.childDocs = [];
         // }
-        if (!this.targetIsValid || !this.targetInfo) {
+        if (!get(this.targetIsValid) || !this.targetInfo) {
             this.childDocs.set([]);
             return;
         }
@@ -168,15 +171,12 @@ export class FileManager {
      * @returns 无
      */
     private async removeChildDoc(docId: string) {
-        // 目标文档无效，返回
-        if (!this.targetIsValid) {
+        if (!get(this.targetIsValid)) {
             return;
         }
-        // 查找子文档
         // const doc = this.childDocs.find(item => item.id === docId);
         const doc = get(this.childDocs).find(item => item.id === docId);
         if (doc) {
-            // 删除子文档
             await removeDoc(this.targetInfo.notebookId, doc.path);
         }
     }
@@ -188,12 +188,14 @@ export class FileManager {
      */
     async removeChildDocs(docIds: string[]) {
         // 目标文档无效，返回
-        if (!this.targetIsValid) {
-            return;
+        if (!get(this.targetIsValid)) {
+            logger.logWarn("删除子文档", this.plugin.i18n.dock["targetInvalid"]);
         }
-        // 删除多个子文档
-        logger.logDebug("删除文档", docIds);
-        await Promise.all(docIds.map(docId => this.removeChildDoc(docId)));
+        else {
+            // 删除多个子文档
+            logger.logDebug("删除子文档", docIds);
+            await Promise.all(docIds.map(docId => this.removeChildDoc(docId)));
+        }
     }
 
     /**

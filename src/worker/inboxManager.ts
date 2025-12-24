@@ -1,3 +1,4 @@
+import { get } from "svelte/store";
 import PluginInboxLight from "@/index";
 import { request } from "@/utils/api";
 import * as logger from "@/utils/logger";
@@ -71,11 +72,19 @@ export class InboxManager {
      * @returns 无
      */
     private async moveShorthands() {
-        Promise.all(
-            this.shorthands.map(
-                shorthand => this.createDocFromShorthand(shorthand)
-            )
-        );
+        const targetIsValid = get(this.plugin.fileManager.targetIsValid);
+        // 目标无效，不移动
+        if (!targetIsValid) {
+            logger.logWarn("收集箱移动", this.plugin.i18n.dock["targetInvalid"]);
+        }
+        // 移动所有文档
+        else {
+            Promise.all(
+                this.shorthands.map(
+                    shorthand => this.createDocFromShorthand(shorthand)
+                )
+            );
+        }
     }
 
     /**
@@ -83,8 +92,15 @@ export class InboxManager {
      * @param shorthand 收集箱条目
      */
     private async createDocFromShorthand(shorthand: IShorthand) {
-        const targetInfo = this.plugin.fileManager.targetInfo;
+        // 检查目标是否有效
+        const targetIsValid = get(this.plugin.fileManager.targetIsValid);
+        if (!targetIsValid) {
+            logger.logWarn("收集箱移动", this.plugin.i18n.dock["targetInvalid"]);
+            return;
+        }
+
         // 设置文档信息
+        const targetInfo = this.plugin.fileManager.targetInfo;
         let hpath = `${targetInfo.hpath}/${shorthand.shorthandTitle}`;
         // 处理空md的情况，参考了思源源码
         let md = shorthand.shorthandMd;

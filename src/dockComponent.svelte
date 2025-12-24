@@ -5,7 +5,7 @@
 <script lang="ts">
     import { adaptHotkey } from "siyuan";
     import PluginInboxLight from "@/index";
-    import { type IChildDoc } from "./worker/fileManager";
+    import { type IChildDoc } from "@/worker/fileManager";
     import * as logger from "@/utils/logger";
 
     // 组件属性
@@ -13,24 +13,23 @@
 
     // i18n文本
     let i18nDock = $derived(plugin.i18n.dock);
-    // 文档列表
+    // 文档列表变量与监听
     let docs = $state<IChildDoc[]>([]);
-    // 订阅 store 变化
     $effect(() => {
         const unsubscribe = plugin.fileManager.childDocs.subscribe(value => {
             docs = value;
+        });
+        return unsubscribe; // 清理函数
     });
-    // // 手动更新函数
-    // function updateDocs() {
-    //     docs = [...plugin.fileManager.childDocs];
-    // }
-    // // 初始加载
-    // $effect(() => {
-    //     updateDocs();
-    // });
 
-    return unsubscribe; // 清理函数
-});
+    // 目标存在性变量和监听
+    let targetIsValid = $state(false);
+    $effect(() => {
+        const unsubscribe = plugin.fileManager.targetIsValid.subscribe(value => {
+            targetIsValid = value;
+        });
+        return unsubscribe; // 清理函数
+    });
 
     // 处理多选
     // 多选相关的变量
@@ -113,48 +112,51 @@
             {i18nDock["title"]}
         </div>
         <span class="fn__flex-1"></span>
-        <span class="fn__space"></span>
+        <!-- 目标有效时才显示功能按钮 -->
+        {#if targetIsValid}
         <!-- 刷新 -->
+        <span class="fn__space"></span>
         <button
             class="block__icon b3-tooltips b3-tooltips__w"
             aria-label="{window.siyuan.languages.refresh}"
             onclick={refreshHandler}>
             <svg><use xlink:href="#iconRefresh"></use></svg>
         </button>
-        <span class="fn__space"></span>
         <!-- 全选 -->
+        <span class="fn__space"></span>
         <button
             class="block__icon b3-tooltips b3-tooltips__w"
             aria-label="{isAllSelected ? i18nDock["unSelectAll"] : i18nDock["selectAll"]}"
             onclick={toggleSelectAll}>
             <svg><use xlink:href="#icon{isAllSelected ? 'Check' : 'Uncheck'}"></use></svg>
         </button>
-        <span class="fn__space"></span>
         <!-- 打开 -->
+        <span class="fn__space"></span>
         <button
             class="block__icon b3-tooltips b3-tooltips__w"
             aria-label="{window.siyuan.languages.openBy}"
             onclick={openHandler}>
             <svg><use xlink:href="#iconOpen"></use></svg>
         </button>
-        <span class="fn__space"></span>
         <!-- 删除 -->
+        <span class="fn__space"></span>
         <button
             class="block__icon b3-tooltips b3-tooltips__w"
             aria-label="{window.siyuan.languages.delete}"
             onclick={deleteHandler}>
             <svg><use xlink:href="#iconTrashcan"></use></svg>
         </button>
-        <span class="fn__space"></span>
         <!-- 定位 -->
+        <span class="fn__space"></span>
         <span
             data-type="locate"
             class="block__icon b3-tooltips b3-tooltips__w"
             aria-label="{i18nDock["locate"]}">
             <svg><use xlink:href="#iconFocus"></use></svg>
         </span>
-        <span class="fn__space"></span>
+        {/if}
         <!-- 最小化 -->
+        <span class="fn__space"></span>
         <span
             data-type="min"
             class="block__icon b3-tooltips b3-tooltips__w"
@@ -165,12 +167,15 @@
     <!-- 文档列表 -->
     <div class="fn__flex-column" style="flex: 1; overflow-y: auto;">
         <ul class="b3-list b3-list--background">
-            <!-- 空列表, 显示提示 -->
-            {#if docs.length === 0}
+            <!-- 目标无效 -->
+            {#if !targetIsValid}
+            <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["targetInvalid"]}</li>
+            <!-- 空列表 -->
+            {:else if docs.length === 0}
                 <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["inboxEmpty"]}</li>
             {:else}
             {#each docs as doc (doc.id)}
-                    <!-- 列表项，在li元素绑定事件，统一处理在checkbox和文本处点击的不同行为 -->
+                    <!-- 列表项 -->
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->

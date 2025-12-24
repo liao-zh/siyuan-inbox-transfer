@@ -1,5 +1,6 @@
 // 管理设置
 import { showMessage } from "siyuan";
+import { get } from "svelte/store";
 import PluginInboxLight from "@/index";
 import { SettingUtils } from "@/libs/setting-utils";
 import { CONSTANTS as C } from "@/constants";
@@ -53,7 +54,7 @@ export class SettingService {
                     await this.plugin.fileManager.setTarget(value);
                     await this.plugin.fileManager.updateChildDocs();
                     // 提示结果
-                    if (this.plugin.fileManager.targetIsValid) {
+                    if (get(this.plugin.fileManager.targetIsValid)) {
                         showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetHint"]}${this.plugin.fileManager.targetInfo.notebookName}/${this.plugin.fileManager.targetInfo.hpath}`, 2000, "info");
                         // logger.logDebug("childDocs", this.fileManager.childDocs);
                     } else {
