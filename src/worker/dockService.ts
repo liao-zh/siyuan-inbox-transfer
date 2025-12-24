@@ -16,7 +16,7 @@ export class DockService {
             config: {
                 position: "LeftBottom",
                 size: { width: 300, height: 300 },
-                icon: "iconInbox",
+                icon: "iconInboxTransfer",
                 title: this.plugin.i18n.dock["title"],
                 // hotkey: adaptHotkey("⇧⌥6"),
             },

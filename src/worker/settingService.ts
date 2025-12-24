@@ -102,20 +102,24 @@ export class SettingService {
             }
         });
 
-        // 替换内置收集箱
-        this.settingUtils.addItem({
-            key: "replaceBuiltIn",
-            value: false,
-            type: "checkbox",
-            title: i18nSetting["replaceBuiltIn"]["title"],
-            description: i18nSetting["replaceBuiltIn"]["description"],
-            action: {
-                callback: () => this.actionCheckbox("replaceBuiltIn")
-            }
-        });
+        // // 替换内置收集箱
+        // this.settingUtils.addItem({
+        //     key: "replaceBuiltIn",
+        //     value: false,
+        //     type: "checkbox",
+        //     title: i18nSetting["replaceBuiltIn"]["title"],
+        //     description: i18nSetting["replaceBuiltIn"]["description"],
+        //     action: {
+        //         callback: () => this.actionCheckbox("replaceBuiltIn")
+        //     }
+        // });
 
     }
 
+    /**
+     * 处理复选框点击事件
+     * @param key 设置键
+     */
     private actionCheckbox(key: string) {
         let value = !this.settingUtils.get(key);
         this.settingUtils.setAndSave(key, value);
