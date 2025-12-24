@@ -63,11 +63,20 @@
 
     // 整体事件
     // 刷新
+    let isRefreshing = $state(false);
     async function refreshHandler(event: MouseEvent) {
         event.stopPropagation();
-        // 更新并移动收集箱条目
-        await plugin.inboxManager.updateAndMove();
-        logger.logDebug("更新文档后", docs);
+
+        if (isRefreshing) return; // 防止重复点击
+
+        isRefreshing = true;
+        try {
+            // 更新并移动收集箱条目
+            await plugin.inboxManager.updateAndMove();
+            logger.logDebug("更新文档后", docs);
+        } finally {
+            isRefreshing = false;
+        }
     }
     // 打开
     function openHandler(event: MouseEvent) {
@@ -118,6 +127,8 @@
         <span class="fn__space"></span>
         <button
             class="block__icon b3-tooltips b3-tooltips__w"
+            class:refreshing={isRefreshing}
+            disabled={isRefreshing}
             aria-label="{window.siyuan.languages.refresh}"
             onclick={refreshHandler}>
             <svg><use xlink:href="#iconRefresh"></use></svg>
@@ -204,3 +215,29 @@
         </ul>
     </div>
 </div>
+
+<style>
+    /* 刷新按钮旋转动画 */
+    .block__icon.refreshing svg {
+        animation: rotate 2s linear infinite;
+        transform-origin: center;
+        animation-delay: 0.5s; /* 给浏览器一点准备时间，否则刚开始时旋转有些飘 */
+        transform: rotate(0deg);
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* 刷新按钮禁用状态样式 */
+    .block__icon.refreshing {
+        opacity: 0.5;
+        cursor: default;
+        pointer-events: none;
+    }
+</style>
