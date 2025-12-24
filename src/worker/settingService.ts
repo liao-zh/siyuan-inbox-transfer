@@ -39,6 +39,7 @@ export class SettingService {
         });
 
         // 添加设置项
+        // 收集箱暂存文档ID
         this.settingUtils.addItem({
             key: C.SETTING_KEY_INBOXDOCID,
             value: "",
@@ -56,13 +57,28 @@ export class SettingService {
                     // 提示结果
                     if (get(this.plugin.fileManager.targetIsValid)) {
                         showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetHint"]}${this.plugin.fileManager.targetInfo.notebookName}/${this.plugin.fileManager.targetInfo.hpath}`, 2000, "info");
-                        // logger.logDebug("childDocs", this.fileManager.childDocs);
                     } else {
                         showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetInvalid"]}`, 2000, "error");
                     }
                 }
             }
         });
+        // 文档名日期前缀
+        this.settingUtils.addItem({
+            key: C.SETTING_KEY_DOCTIMEPREFIX,
+            value: true,
+            type: "checkbox",
+            title: i18nSetting[C.SETTING_KEY_DOCTIMEPREFIX]["title"],
+            description: i18nSetting[C.SETTING_KEY_DOCTIMEPREFIX]["description"],
+            action: {
+                callback: () => {
+                    let value = !this.settingUtils.get(C.SETTING_KEY_DOCTIMEPREFIX);
+                    this.settingUtils.setAndSave(C.SETTING_KEY_DOCTIMEPREFIX, value);
+                    logger.logDebug(`设置：${C.SETTING_KEY_DOCTIMEPREFIX}`, value);
+                }
+            }
+        });
+        // 替换内置收集箱
         this.settingUtils.addItem({
             key: C.SETTING_KEY_REPLACEBUILTIN,
             value: false,
@@ -77,6 +93,7 @@ export class SettingService {
                 }
             }
         });
+
     }
 
     /**

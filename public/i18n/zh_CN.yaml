@@ -8,6 +8,9 @@ setting:
   replaceBuiltIn:
     title: "替换内置收集箱"
     description: "选项开启后，本插件会替换内置收集箱的面板和快捷键；关闭后，恢复内置收集箱。"
+  docTimePrefix:
+    title: "文档时间前缀"
+    description: "选项开启后，从收集箱条目新建文档时文档名加上时间前缀'YYYY-MM-DD HH:mm'。"
 dock:
   title: "收集箱简化"
   locate: "在文档树中定位"

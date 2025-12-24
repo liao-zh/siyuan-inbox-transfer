@@ -76,6 +76,8 @@
 
         isRefreshing = true;
         try {
+            // 更新子文档列表，以免收集箱没有新条目时不触发更新
+            await plugin.fileManager.updateChildDocs();
             // 更新并移动收集箱条目
             await plugin.inboxManager.updateAndMove();
             logger.logDebug("更新文档后", docs);

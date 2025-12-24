@@ -1,6 +1,7 @@
 import { get } from "svelte/store";
 import PluginInboxLight from "@/index";
 import { request } from "@/utils/api";
+import { CONSTANTS as C } from "@/constants";
 import * as logger from "@/utils/logger";
 
 /**
@@ -101,11 +102,17 @@ export class InboxManager {
 
         // 设置文档信息
         const targetInfo = this.plugin.fileManager.targetInfo;
-        let hpath = `${targetInfo.hpath}/${shorthand.shorthandTitle}`;
+        // 设置标题
+        const docTimePrefix = this.plugin.settingService.get(C.SETTING_KEY_DOCTIMEPREFIX);
+        let title = shorthand.shorthandTitle;
+        if (docTimePrefix) {
+            title = `${shorthand.hCreated} ${title}`;
+        }
+        let hpath = `${targetInfo.hpath}/${title}`;
         // 处理空md的情况，参考了思源源码
         let md = shorthand.shorthandMd;
         if ("" === md && "" === shorthand.shorthandContent && "" != shorthand.shorthandURL) {
-            md = "[" + shorthand.shorthandTitle + "](" + shorthand.shorthandURL + ")";
+            md = "[" + title + "](" + shorthand.shorthandURL + ")";
         }
 
         // 创建文档
