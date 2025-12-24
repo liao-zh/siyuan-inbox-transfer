@@ -1,7 +1,7 @@
-import PluginInboxLight from "@/index";
-import DockComponent from "@/dockComponent.svelte";
 import { mount } from "svelte";
-import { adaptHotkey } from "siyuan";
+// import { adaptHotkey } from "siyuan";
+import PluginInboxLight from "@/index";
+import DockComponent from "@/worker/dockComponent.svelte";
 
 export class DockService {
     private plugin: PluginInboxLight;

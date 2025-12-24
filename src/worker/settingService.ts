@@ -3,7 +3,6 @@ import { showMessage } from "siyuan";
 import { get } from "svelte/store";
 import PluginInboxLight from "@/index";
 import { SettingUtils } from "@/libs/setting-utils";
-import { CONSTANTS as C } from "@/constants";
 import * as logger from "@/utils/logger";
 
 /**
@@ -31,80 +30,87 @@ export class SettingService {
         // 设置工具初始化
         this.settingUtils = new SettingUtils({
             plugin: this.plugin,
-            name: C.SETTING_STORAGE,
-            height: C.SETTING_STORAGE_HEIGHT,
+            name: "menu_config",
+            height: "600px",
             callback: (data) => {
                 logger.logDebug("设置完成", data);
             }
         });
 
         // 添加设置项
-        // 收集箱暂存文档ID
+        // 收集箱中转站ID
         this.settingUtils.addItem({
-            key: C.SETTING_KEY_INBOXDOCID,
+            key: "targetId",
             value: "",
             type: "textinput",
-            title: i18nSetting[C.SETTING_KEY_INBOXDOCID]["title"],
-            description: i18nSetting[C.SETTING_KEY_INBOXDOCID]["description"],
+            title: i18nSetting["targetId"]["title"],
+            description: i18nSetting["targetId"]["description"],
             action: {
                 callback: async () => {
                     // 从文本框读取设置值
-                    let value = await this.settingUtils.takeAndSave(C.SETTING_KEY_INBOXDOCID);
-                    logger.logDebug(`设置：${C.SETTING_KEY_INBOXDOCID}`, value);
+                    let value = await this.settingUtils.takeAndSave("targetId");
+                    logger.logDebug(`设置：${"targetId"}`, value);
                     // 检查并设置目标id
                     await this.plugin.fileManager.setTarget(value);
-                    await this.plugin.fileManager.updateChildDocs();
+                    await this.plugin.fileManager.updateDocs();
                     // 提示结果
+                    let hint = "";
                     if (get(this.plugin.fileManager.targetIsValid)) {
-                        showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetHint"]}${this.plugin.fileManager.targetInfo.notebookName}/${this.plugin.fileManager.targetInfo.hpath}`, 2000, "info");
+                        hint = `${i18nSetting["targetId"]["targetHint"]}${this.plugin.fileManager.targetInfo.notebookName}/${this.plugin.fileManager.targetInfo.hpath}`;
+                        showMessage(hint, 2000, "info");
                     } else {
-                        showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetInvalid"]}`, 2000, "error");
+                        hint = i18nSetting["targetId"]["targetInvalid"]
+                        showMessage(hint, 2000, "error");
                     }
                 }
             }
         });
+
         // 文档名日期前缀
         this.settingUtils.addItem({
-            key: C.SETTING_KEY_DOCTIMEPREFIX,
+            key: "docTimePrefix",
             value: true,
             type: "checkbox",
-            title: i18nSetting[C.SETTING_KEY_DOCTIMEPREFIX]["title"],
-            description: i18nSetting[C.SETTING_KEY_DOCTIMEPREFIX]["description"],
+            title: i18nSetting["docTimePrefix"]["title"],
+            description: i18nSetting["docTimePrefix"]["description"],
             action: {
-                callback: () => this.actionCheckbox(C.SETTING_KEY_DOCTIMEPREFIX)
+                callback: () => this.actionCheckbox("docTimePrefix")
             }
         });
-        // 文档删除确认
+
+        // 中转文档删除确认
         this.settingUtils.addItem({
-            key: C.SETTING_KEY_DELOPCONFIRM,
+            key: "delDocConfirm",
             value: true,
             type: "checkbox",
-            title: i18nSetting[C.SETTING_KEY_DELOPCONFIRM]["title"],
-            description: i18nSetting[C.SETTING_KEY_DELOPCONFIRM]["description"],
+            title: i18nSetting["delDocConfirm"]["title"],
+            description: i18nSetting["delDocConfirm"]["description"],
             action: {
-                callback: () => this.actionCheckbox(C.SETTING_KEY_DELOPCONFIRM)
+                callback: () => this.actionCheckbox("delDocConfirm")
             }
         });
+
         // 刷新后从收集箱中删除条目
         this.settingUtils.addItem({
-            key: C.SETTING_KEY_DELAFTERREFRESH,
-            value: false, // 默认不删除，使用稳定后应设为删除
-            type: "checkbox",
-            title: i18nSetting[C.SETTING_KEY_DELAFTERREFRESH]["title"],
-            description: i18nSetting[C.SETTING_KEY_DELAFTERREFRESH]["description"],
-            action: {
-                callback: () => this.actionCheckbox(C.SETTING_KEY_DELAFTERREFRESH)
-            }
-        });
-        // 替换内置收集箱
-        this.settingUtils.addItem({
-            key: C.SETTING_KEY_REPLACEBUILTIN,
+            key: "delShorthands",
             value: false,
             type: "checkbox",
-            title: i18nSetting[C.SETTING_KEY_REPLACEBUILTIN]["title"],
-            description: i18nSetting[C.SETTING_KEY_REPLACEBUILTIN]["description"],
+            title: i18nSetting["delShorthands"]["title"],
+            description: i18nSetting["delShorthands"]["description"],
             action: {
-                callback: () => this.actionCheckbox(C.SETTING_KEY_REPLACEBUILTIN)
+                callback: () => this.actionCheckbox("delShorthands")
+            }
+        });
+
+        // 替换内置收集箱
+        this.settingUtils.addItem({
+            key: "replaceBuiltIn",
+            value: false,
+            type: "checkbox",
+            title: i18nSetting["replaceBuiltIn"]["title"],
+            description: i18nSetting["replaceBuiltIn"]["description"],
+            action: {
+                callback: () => this.actionCheckbox("replaceBuiltIn")
             }
         });
 

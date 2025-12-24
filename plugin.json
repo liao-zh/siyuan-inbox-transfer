@@ -1,8 +1,8 @@
 {
-  "name": "siyuan-inbox-light",
+  "name": "siyuan-inbox-transfer",
   "author": "liao-zh",
   "url": "",
-  "version": "0.0.1",
+  "version": "0.3.0",
   "minAppVersion": "3.0.12",
   "backends": [
     "windows",
@@ -19,12 +19,12 @@
     "desktop-window"
   ],
   "displayName": {
-    "en_US": "Inbox Light",
-    "zh_CN": "简化收集箱"
+    "en_US": "Inbox Transfer",
+    "zh_CN": "收集箱中转站"
   },
   "description": {
-    "en_US": "A Siyuan plugin to lighten the inbox",
-    "zh_CN": "一个简化收集箱的思源插件"
+    "en_US": "A Siyuan plugin to work as a transfer station for the inbox",
+    "zh_CN": "用于简化收集箱中转站工作流的思源插件"
   },
   "readme": {
     "en_US": "README.md",
@@ -37,7 +37,9 @@
   },
   "keywords": [
     "plugin",
-    "sample",
-    "插件样例"
+    "inbox",
+    "transfer",
+    "收集箱",
+    "中转站"
   ]
 }

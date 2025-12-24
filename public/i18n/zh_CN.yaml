@@ -1,29 +1,29 @@
 ---
 setting:
-  inboxDocId:
+  targetId:
     title: "收集箱中转站ID"
-    description: "填入作为收集箱中转站的文档的ID。"
+    description: "填入作为收集箱中转站的文档的ID。（文档-复制-复制ID）"
     targetHint: "收集箱中转站："
     targetInvalid: "无效的文档ID，请检查！"
   docTimePrefix:
-    title: "文档时间前缀"
-    description: "选项开启后，从收集箱条目新建文档时，文档名会加上时间前缀'YYYY-MM-DD HH:mm'。"
-  delOpConfirm:
-    title: "文档删除确认"
-    description: "选项开启后，删除文档时会弹窗确认。关闭可以简化工作流。"
-  delAfterRefresh:
+    title: "中转文档时间前缀"
+    description: "选项开启后，从收集箱条目新建文档时，中转文档名会加上时间前缀'YYYY-MM-DD HH:mm'。"
+  delDocConfirm:
+    title: "中转文档删除确认"
+    description: "选项开启后，删除中转文档时会弹窗确认。关闭可以简化工作流。"
+  delShorthands:
     title: "刷新后从收集箱中删除条目"
-    description: "选项开启后，点击刷新后会自动从收集箱中删除所有已转换成文档的条目。关闭可以简化工作流。"
+    description: "选项开启后，点击刷新后会自动从收集箱中删除所有已中转的条目。关闭可以简化工作流。"
   replaceBuiltIn:
     title: "替换内置收集箱"
     description: "选项开启后，本插件会替换内置收集箱的面板和快捷键。关闭后，恢复内置收集箱。"
 dock:
   title: "收集中转站"
-  targetInvalid: "中转路径无效，请先前往设置！"
-  locate: "在文档树中定位路径"
+  targetInvalid: "中转站路径无效，请先前往设置！"
+  locate: "在文档树中定位"
   inboxEmpty: "暂无收集箱条目"
   selectAll: "全选"
   unSelectAll: "取消全选"
 common:
-  targetInvalid: "中转路径无效，请先前往设置！"
-  deleteOpConfirmDesc: "确认删除选中的文档吗？"
+  targetInvalid: "中转站路径无效，请先前往设置！"
+  delDocConfirmDesc: "确认删除选中的中转文档吗？"

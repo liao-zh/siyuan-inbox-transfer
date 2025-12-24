@@ -6,8 +6,7 @@
     import { adaptHotkey, expandDocTree } from "siyuan";
     import { onDestroy } from 'svelte';
     import PluginInboxLight from "@/index";
-    import { type IChildDoc } from "@/worker/fileManager";
-    import { CONSTANTS as C } from "@/constants";
+    import { type IDoc } from "@/worker/fileManager";
     import * as logger from "@/utils/logger";
 
     // 组件属性
@@ -15,18 +14,19 @@
 
     // i18n文本
     let i18nDock = $derived(plugin.i18n.dock);
-    // 文档列表变量与监听
-    let docs = $state<IChildDoc[]>([]);
+
+    // 中转文档列表变量与监听
+    let docs = $state<IDoc[]>([]);
     let cleanupDocs: (() => void) | null = null;
     $effect(() => {
-        const unsubscribe = plugin.fileManager.childDocs.subscribe(value => {
+        const unsubscribe = plugin.fileManager.docs.subscribe(value => {
             docs = value;
         });
         cleanupDocs = unsubscribe; // 保存清理函数
         return unsubscribe; // 清理函数
     });
 
-    // 目标存在性变量和监听
+    // 中转站变量和监听
     let targetIsValid = $state(false);
     let cleanupTarget: (() => void) | null = null;
     $effect(() => {
@@ -68,7 +68,7 @@
     }
 
     // 整体事件
-    // 刷新
+    // 刷新中转站
     let isRefreshing = $state(false);
     async function refreshHandler(event: MouseEvent) {
         event.stopPropagation();
@@ -77,31 +77,31 @@
 
         isRefreshing = true;
         try {
-            // 更新子文档列表，以免收集箱没有新条目时不触发更新
-            await plugin.fileManager.updateChildDocs();
+            // 更新中转文档列表，以免收集箱没有新条目时不触发更新
+            await plugin.fileManager.updateDocs();
             // 更新并移动收集箱条目
             await plugin.inboxManager.updateAndMove();
         } finally {
             isRefreshing = false;
         }
     }
-    // 打开
+    // 打开中转文档
     function openHandler(event: MouseEvent) {
         event.stopPropagation();
         // 打开选中的文档
-        plugin.fileManager.openChildDocs(Array.from(selectedIds), event);
+        plugin.fileManager.openDocs(Array.from(selectedIds), event);
         // 打开后取消选中
         unSelectAll();
     }
-    // 删除
+    // 删除中转文档
     async function deleteHandler(event: MouseEvent) {
         event.stopPropagation();
         // 删除选中的文档
-        await plugin.fileManager.removeChildDocs(Array.from(selectedIds));
+        await plugin.fileManager.removeDocs(Array.from(selectedIds));
         // 删除后取消选中
         unSelectAll();
     }
-    // 定位
+    // 定位中转站
     function locateHandler(event: MouseEvent) {
         event.stopPropagation();
         event.preventDefault();
@@ -139,18 +139,16 @@
         }
         // 点击了文本区域，打开文档
         else if (target.closest('.b3-list-item__text')) {
-            plugin.fileManager.openChildDocs([docId], event);
+            plugin.fileManager.openDocs([docId], event);
         }
     }
 
     // 组件销毁时的清理
     onDestroy(() => {
-        // 清理文档列表订阅
         if (cleanupDocs) {
             cleanupDocs();
             cleanupDocs = null;
         }
-        // 清理目标有效性订阅
         if (cleanupTarget) {
             cleanupTarget();
             cleanupTarget = null;
@@ -165,7 +163,7 @@
         <!-- 标题 -->
         <div class="block__logo">{i18nDock["title"]}</div>
         <span class="fn__flex-1"></span>
-        <!-- 目标有效时才显示功能按钮 -->
+        <!-- 中转站有效时才显示功能按钮 -->
         {#if targetIsValid}
         <!-- 刷新 -->
         <span class="fn__space"></span>
@@ -173,7 +171,7 @@
             class="block__icon b3-tooltips b3-tooltips__w"
             class:refreshing={isRefreshing}
             disabled={isRefreshing}
-            style="{isRefreshing ? 'opacity: ' + C.STYLE_DISABLED_OPACITY + ';' + 'cursor: default; pointer-events: none;' : ''}"
+            style="{isRefreshing ? 'opacity: 0.5; cursor: default; pointer-events: none;' : ''}"
             aria-label="{window.siyuan.languages.refresh}"
             onclick={refreshHandler}>
             <svg><use xlink:href="#iconRefresh"></use></svg>
@@ -220,18 +218,18 @@
             <svg><use xlink:href="#iconMin"></use></svg>
         </span>
     </div>
-    <!-- 文档列表 -->
+    <!-- 中转文档列表 -->
     <div class="fn__flex-column" style="flex: 1; overflow-y: auto;">
         <ul class="b3-list b3-list--background">
-            <!-- 目标无效 -->
+            <!-- 中转站无效 -->
             {#if !targetIsValid}
-            <li class="b3-list--empty" style="opacity: {C.STYLE_DISABLED_OPACITY};">{i18nDock["targetInvalid"]}</li>
-            <!-- 空列表 -->
+            <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["targetInvalid"]}</li>
+            <!-- 中转文档列表为空 -->
             {:else if docs.length === 0}
-                <li class="b3-list--empty" style="opacity: {C.STYLE_DISABLED_OPACITY};">{i18nDock["inboxEmpty"]}</li>
+                <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["inboxEmpty"]}</li>
             {:else}
             {#each docs as doc (doc.id)}
-                    <!-- 列表项 -->
+                    <!-- 中转文档列表项 -->
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
                     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->

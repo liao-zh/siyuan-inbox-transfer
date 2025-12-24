@@ -1,4 +1,4 @@
-const DISPLAY_NAME = "收集箱简化";
+const DISPLAY_NAME = "收集箱中转站";
 
 /**
  * 调试日志

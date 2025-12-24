@@ -1,14 +1,10 @@
-import {
-    Plugin,
-    adaptHotkey,
-} from "siyuan";
-import "@/index.scss";
+import { Plugin } from "siyuan";
+// import "@/index.scss";
 
 import { FileManager } from "@/worker/fileManager";
 import { InboxManager } from "@/worker/inboxManager";
 import { SettingService } from "@/worker/settingService";
 import { DockService } from "@/worker/dockService";
-import { CONSTANTS as C } from "@/constants";
 import * as logger from "@/utils/logger";
 
 
@@ -21,7 +17,7 @@ export default class PluginInboxLight extends Plugin {
     async onload() {
         logger.logInfo("加载插件");
 
-        this.data[C.SETTING_STORAGE] = { readonlyText: "Readonly" };
+        this.data["menu_config"] = { readonlyText: "Readonly" };
 
         // 构建模块
         this.settingService = new SettingService(this);
@@ -44,9 +40,9 @@ export default class PluginInboxLight extends Plugin {
 
         // 初始化
         await this.settingService.load();
-        await this.fileManager.setTarget(this.settingService.get(C.SETTING_KEY_INBOXDOCID));
+        await this.fileManager.setTarget(this.settingService.get("targetId"));
         this.fileManager.bindHandler();
-        await this.fileManager.updateChildDocs();
+        await this.fileManager.updateDocs();
 
     }
 

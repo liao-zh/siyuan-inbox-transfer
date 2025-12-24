@@ -1,12 +1,19 @@
 import { get } from "svelte/store";
 import PluginInboxLight from "@/index";
 import { request } from "@/utils/api";
-import { CONSTANTS as C } from "@/constants";
 import * as logger from "@/utils/logger";
 
 /**
  * 收集箱条目接口
  * 参考：siyuan/app/src/layout/dock/Inbox.ts:IInbox
+ * @property oId 条目的ID，用于标识条目
+ * @property shorthandContent 条目的内容
+ * @property shorthandMd 条目的Markdown内容，用于新建文档填充内容
+ * @property shorthandDesc 条目的描述
+ * @property shorthandFrom 条目的来源
+ * @property shorthandTitle 条目的标题，用于新建文档标题
+ * @property shorthandURL 条目的URL
+ * @property hCreated 条目的创建时间（YYYY-MM-DD HH:mm）
  */
 interface IShorthand {
     oId: string;
@@ -33,7 +40,7 @@ export class InboxManager {
     }
 
     /**
-     * 对所有收集箱条目：更新拉取-移动生成文档-删除
+     * 对所有收集箱条目：更新拉取-移动生成文档（-依据设置决定是否删除）
      * @returns 无
      */
     async updateAndMove() {
@@ -44,7 +51,7 @@ export class InboxManager {
         // 对所有收集箱条目创建文档
         await this.moveShorthands();
         // 删除所有收集箱条目
-        if (this.plugin.settingService.get(C.SETTING_KEY_DELAFTERREFRESH)) {
+        if (this.plugin.settingService.get("delShorthands")) {
             await this.removeShorthands();
         }
     }
@@ -85,7 +92,7 @@ export class InboxManager {
         else {
             Promise.all(
                 this.shorthands.map(
-                    shorthand => this.createDocFromShorthand(shorthand)
+                    shorthand => this.createDoc(shorthand)
                 )
             );
         }
@@ -93,9 +100,10 @@ export class InboxManager {
 
     /**
      * 从单个收集箱条目创建文档
+     * 参考：siyuan/app/src/layout/dock/Inbox.ts:Inbox.move()
      * @param shorthand 收集箱条目
      */
-    private async createDocFromShorthand(shorthand: IShorthand) {
+    private async createDoc(shorthand: IShorthand) {
         // 检查目标是否有效
         const targetIsValid = get(this.plugin.fileManager.targetIsValid);
         if (!targetIsValid) {
@@ -106,7 +114,7 @@ export class InboxManager {
         // 设置文档信息
         const targetInfo = this.plugin.fileManager.targetInfo;
         // 设置标题
-        const docTimePrefix = this.plugin.settingService.get(C.SETTING_KEY_DOCTIMEPREFIX);
+        const docTimePrefix = this.plugin.settingService.get("docTimePrefix");
         let title = shorthand.shorthandTitle;
         if (docTimePrefix) {
             title = `${shorthand.hCreated} ${title}`;

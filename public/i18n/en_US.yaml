@@ -1,17 +1,17 @@
 ---
 setting:
-  inboxDocId:
+  targetId:
     title: "Inbox Transfer Station ID"
-    description: "Enter the ID of the document to use as the inbox transfer station."
+    description: "Enter the ID of the document to use as the inbox transfer station. (Document - Copy - Copy ID)"
     targetHint: "Inbox transfer station path: "
     targetInvalid: "Invalid document ID, please check!"
   docTimePrefix:
     title: "Document Time Prefix"
     description: "Enable to add the time prefix 'YYYY-MM-DD HH:mm' to the document name when creating a new document from the inbox."
-  delOpConfirm:
+  delDocConfirm:
     title: "Confirm Document Deletion"
     description: "Enable to confirm deletion of documents. Disable for a faster workflow."
-  delAfterRefresh:
+  delShorthands:
     title: "Delete Items After Refresh"
     description: "Enable to delete all items in the inbox that have been transfered after refreshing. Enable for a faster workflow."
   replaceBuiltIn:
@@ -26,4 +26,4 @@ dock:
   unSelectAll: "Undo Select All"
 common:
   targetInvalid: "Target transfer station is invalid. Please go to settings first!"
-  deleteOpConfirmDesc: "Are you sure you want to delete the selected documents?"
+  delDocConfirmDesc: "Are you sure you want to delete the selected documents?"

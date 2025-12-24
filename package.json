@@ -1,8 +1,8 @@
 {
-  "name": "siyuan-inbox-light",
-  "version": "0.0.1",
+  "name": "siyuan-inbox-transfer",
+  "version": "0.3.0",
   "type": "module",
-  "description": "A Siyuan plugin to lighten the inbox",
+  "description": "A Siyuan plugin to work as a transfer station for the inbox",
   "repository": "",
   "homepage": "",
   "author": "liao-zh",
