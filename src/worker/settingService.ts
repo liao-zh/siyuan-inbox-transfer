@@ -51,7 +51,7 @@ export class SettingService {
                     logger.logDebug(`设置：${C.SETTING_KEY_INBOXDOCID}`, value);
                     // 检查并设置目标id
                     await this.plugin.fileManager.setTarget(value);
-                    await this.plugin.fileManager.getChildDocs();
+                    await this.plugin.fileManager.updateChildDocs();
                     // 提示结果
                     if (this.plugin.fileManager.targetIsValid) {
                         showMessage(`${i18nSetting[C.SETTING_KEY_INBOXDOCID]["targetHint"]}${this.plugin.fileManager.targetInfo.notebookName}/${this.plugin.fileManager.targetInfo.hpath}`, 2000, "info");

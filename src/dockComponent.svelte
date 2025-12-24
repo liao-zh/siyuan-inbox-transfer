@@ -11,12 +11,26 @@
     // 组件属性
     let { plugin }: { plugin: PluginInboxLight } = $props();
 
-    // 使用的变量
+    // i18n文本
     let i18nDock = $derived(plugin.i18n.dock);
+    // 文档列表
     let docs = $state<IChildDoc[]>([]);
+    // 订阅 store 变化
     $effect(() => {
-        docs = plugin.fileManager.childDocs;
+        const unsubscribe = plugin.fileManager.childDocs.subscribe(value => {
+            docs = value;
     });
+    // // 手动更新函数
+    // function updateDocs() {
+    //     docs = [...plugin.fileManager.childDocs];
+    // }
+    // // 初始加载
+    // $effect(() => {
+    //     updateDocs();
+    // });
+
+    return unsubscribe; // 清理函数
+});
 
     // 处理多选
     // 多选相关的变量
@@ -52,8 +66,9 @@
     // 刷新
     async function refreshHandler(event: MouseEvent) {
         event.stopPropagation();
+        // 更新并移动收集箱条目
         await plugin.inboxManager.updateAndMove();
-        await plugin.fileManager.getChildDocs();
+        logger.logDebug("更新文档后", docs);
     }
     // 打开
     function openHandler(event: MouseEvent) {
@@ -70,8 +85,6 @@
         await plugin.fileManager.removeChildDocs(Array.from(selectedIds));
         // 删除后取消选中
         unSelectAll();
-        logger.logDebug("删除文档", Array.from(selectedIds));
-        logger.logDebug("删除文档后", docs);
     }
 
     // 单个列表项事件

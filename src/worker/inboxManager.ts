@@ -35,6 +35,7 @@ export class InboxManager {
      * @returns 无
      */
     async updateAndMove() {
+        this.shorthands = [];
         await this.getShorthands();
         await this.moveShorthands();
         // await this.removeShorthands();

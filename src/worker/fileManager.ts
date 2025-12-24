@@ -1,4 +1,5 @@
-import { openTab, expandDocTree } from "siyuan";
+import { openTab, type IEventBusMap } from "siyuan";
+import { writable, get } from "svelte/store";
 import PluginInboxLight from "@/index";
 import { request, sql, getNotebookConf, removeDoc } from "@/utils/api";
 import * as logger from "@/utils/logger";
@@ -37,6 +38,8 @@ export interface IChildDoc {
  * @attr targetInfo {ITarget} - 目标文档信息
  * @attr childDocs {IChildDoc[]} - 目标文档的子文档列表
  * @method setTarget(targetId) 设置目标文档信息
+ * @method bindHandler() 绑定需要更新子文档列表的事件处理器
+ * @method unbindHandler() 解绑事件处理器
  * @method getChildDocs() 获取子文档列表
  * @method removeChildDocs(childDocIds) 删除子文档列表
  * @method openChildDocs(childDocIds) 打开子文档列表
@@ -45,7 +48,9 @@ export class FileManager {
     private plugin: PluginInboxLight;
     targetIsValid: boolean = false;
     targetInfo: null|ITarget = null;
-    childDocs: IChildDoc[] = [];
+    // childDocs: IChildDoc[] = [];
+    childDocs = writable<IChildDoc[]>([]);
+    private refreshHandlerRef = this.refreshHandler.bind(this);
 
     constructor(plugin: PluginInboxLight) {
         this.plugin = plugin;
@@ -94,40 +99,67 @@ export class FileManager {
     }
 
     /**
-     * 获取目标文档的子文档列表
-     * @returns 子文档列表
+     * 绑定事件处理器
+    */
+    bindHandler() {
+        this.plugin.eventBus.on("ws-main", this.refreshHandlerRef);
+    }
+
+    /**
+     * 解绑事件处理器
      */
-    async getChildDocs(): Promise<IChildDoc[]> {
+    unbindHandler() {
+        this.plugin.eventBus.off("ws-main", this.refreshHandlerRef);
+    }
+
+    /**
+     * 发生事件时更新子文档列表
+     * @param event - 主WebSocket事件
+     */
+    async refreshHandler(event: CustomEvent<IEventBusMap["ws-main"]>) {
+        // logger.logDebug("ws-main事件：", event.detail.cmd);
+        const cmdTypes = ["create", "removeDoc", "moveDoc", "rename"];
+        if (cmdTypes.includes(event.detail.cmd)) {
+            logger.logDebug(`触发事件：ws-main(${event.detail.cmd})"`, event);
+            await this.updateChildDocs();
+        }
+    }
+
+    /**
+     * 获取目标文档的子文档列表
+     * @returns 空 //子文档列表
+     */
+    async updateChildDocs() {
         // 目标文档无效，返回空列表
-        if (!this.targetIsValid) {
-            this.childDocs = [];
-            return this.childDocs;
+        // if (!this.targetIsValid) {
+        //     this.childDocs = [];
+        // }
+        if (!this.targetIsValid || !this.targetInfo) {
+            this.childDocs.set([]);
+            return;
         }
 
         // 查询子文档
         const data = await request(
             "/api/filetree/listDocsByPath",
             {
-                notebook: this.targetInfo?.notebookId,
-                path: this.targetInfo?.path,
+                notebook: this.targetInfo.notebookId,
+                path: this.targetInfo.path,
             }
         );
         // 提取子文档的信息
-        // // 先清空现有数组（保持引用）
-        // this.childDocs.length = 0;
-        // // 添加新数据
-        // this.childDocs.push(...data.files.map(item => ({
+        // this.childDocs = data.files.map(item => ({
         //     name: item.name.replace(/\.sy$/, ''),
         //     id: item.id,
         //     path: item.path
-        // })));
-        this.childDocs = data.files.map(item => ({
+        // }));
+        // logger.logDebug("获取文档列表", this.childDocs);
+        this.childDocs.set(data.files.map(item => ({
             name: item.name.replace(/\.sy$/, ''),
             id: item.id,
             path: item.path
-        }));
-        logger.logDebug("获取文档列表", this.childDocs);
-        return this.childDocs
+        })));
+        logger.logDebug("获取文档列表", get(this.childDocs));
     }
 
     /**
@@ -141,7 +173,8 @@ export class FileManager {
             return;
         }
         // 查找子文档
-        const doc = this.childDocs.find(item => item.id === docId);
+        // const doc = this.childDocs.find(item => item.id === docId);
+        const doc = get(this.childDocs).find(item => item.id === docId);
         if (doc) {
             // 删除子文档
             await removeDoc(this.targetInfo.notebookId, doc.path);
@@ -161,8 +194,8 @@ export class FileManager {
         // 删除多个子文档
         logger.logDebug("删除文档", docIds);
         await Promise.all(docIds.map(docId => this.removeChildDoc(docId)));
-        // 更新子文档列表
-        await this.getChildDocs();
+        // // 更新子文档列表
+        // await this.updateChildDocs();
     }
 
     /**
