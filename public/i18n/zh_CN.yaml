@@ -19,7 +19,7 @@ setting:
     title: "替换内置收集箱"
     description: "选项开启后，本插件会替换内置收集箱的dock栏和快捷键（默认Alt+6）。关闭后，恢复内置收集箱。重启后生效。"
 dock:
-  title: "收集中转站"
+  title: "收集箱中转站"
   targetInvalid: "中转站路径无效，请先前往设置！"
   locate: "在文档树中定位"
   inboxEmpty: "暂无收集箱条目"
