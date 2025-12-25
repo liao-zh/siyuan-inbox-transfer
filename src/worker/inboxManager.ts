@@ -114,11 +114,23 @@ export class InboxManager {
         // 设置文档信息
         const targetInfo = this.plugin.fileManager.targetInfo;
         // 设置标题
+        let title: string;
         const docTimePrefix = this.plugin.settingService.get("docTimePrefix");
-        let title = shorthand.shorthandTitle;
-        if (docTimePrefix) {
-            title = `${shorthand.hCreated} ${title}`;
+        switch (docTimePrefix) {
+            case "1": // 无前缀
+                title = shorthand.shorthandTitle;
+                break;
+            case "2": // YYYY-MM-DD
+                title = shorthand.hCreated.split(" ")[0] + " " + shorthand.shorthandTitle;
+                break;
+            case "3": // YYYY-MM-DD HH:mm
+                title = shorthand.hCreated + " " + shorthand.shorthandTitle;
+                break;
+            default:
+                title = shorthand.shorthandTitle;
+                break;
         }
+        // 设置路径
         let hpath = `${targetInfo.hpath}/${title}`;
         // 处理空md的情况，参考了思源源码
         let md = shorthand.shorthandMd;

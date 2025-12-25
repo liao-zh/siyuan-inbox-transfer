@@ -8,6 +8,7 @@ setting:
   docTimePrefix:
     title: "Document Time Prefix"
     description: "Enable to add the time prefix 'YYYY-MM-DD HH:mm' to the document name when creating a new document from the inbox."
+    noPrefix: "No prefix"
   delDocConfirm:
     title: "Confirm Document Deletion"
     description: "Enable to confirm deletion of documents. Disable for a faster workflow."

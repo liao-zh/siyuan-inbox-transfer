@@ -49,7 +49,7 @@ export class SettingService {
                 callback: async () => {
                     // 从文本框读取设置值
                     let value = await this.settingUtils.takeAndSave("targetId");
-                    logger.logDebug(`设置：${"targetId"}`, value);
+                    logger.logDebug(`设置：targetId`, value);
                     // 检查并设置目标id
                     await this.plugin.fileManager.setTarget(value);
                     await this.plugin.fileManager.updateDocs();
@@ -69,14 +69,24 @@ export class SettingService {
         // 文档名日期前缀
         this.settingUtils.addItem({
             key: "docTimePrefix",
-            value: true,
-            type: "checkbox",
+            value: 1,
+            type: "select",
             title: i18nSetting["docTimePrefix"]["title"],
             description: i18nSetting["docTimePrefix"]["description"],
+            options: {
+                1: i18nSetting["docTimePrefix"]["noPrefix"],
+                2: "YYYY-MM-DD",
+                3: "YYYY-MM-DD HH:mm"
+            },
             action: {
-                callback: () => this.actionCheckbox("docTimePrefix")
+                callback: () => {
+                    // Read data in real time
+                    let value = this.settingUtils.take("docTimePrefix");
+                    logger.logDebug(`设置：docTimePrefix`, value);
+                }
             }
         });
+
 
         // 中转文档删除确认
         this.settingUtils.addItem({

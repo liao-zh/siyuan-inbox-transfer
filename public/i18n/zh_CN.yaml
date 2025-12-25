@@ -8,6 +8,7 @@ setting:
   docTimePrefix:
     title: "中转文档时间前缀"
     description: "选项开启后，从收集箱条目新建文档时，中转文档名会加上时间前缀'YYYY-MM-DD HH:mm'。"
+    noPrefix: "无前缀"
   delDocConfirm:
     title: "中转文档删除确认"
     description: "选项开启后，删除中转文档时会弹窗确认。关闭可以简化工作流。"
