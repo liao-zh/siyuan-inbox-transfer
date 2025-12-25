@@ -1,3 +1,6 @@
+/**
+ * dock栏设置服务
+ */
 import { mount } from "svelte";
 // import { adaptHotkey } from "siyuan";
 import PluginInboxLight from "@/index";

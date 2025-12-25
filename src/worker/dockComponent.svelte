@@ -1,6 +1,5 @@
 <!--
- FilePath     : /src/dock.svelte
- Description  : Dock component for inbox light plugin
+    dock栏内容svelte组件
 -->
 <script lang="ts">
     import { adaptHotkey, expandDocTree } from "siyuan";

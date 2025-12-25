@@ -1,3 +1,6 @@
+/**
+ * 中转文件管理器
+ */
 import { openTab, type IEventBusMap, confirm } from "siyuan";
 import { writable, get } from "svelte/store";
 import PluginInboxLight from "@/index";

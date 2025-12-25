@@ -1,3 +1,6 @@
+/**
+ * 收集箱管理器
+ */
 import { get } from "svelte/store";
 import PluginInboxLight from "@/index";
 import { request } from "@/utils/api";

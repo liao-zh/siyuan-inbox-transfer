@@ -1,4 +1,6 @@
-// 管理设置
+/**
+ * 插件设置服务
+ */
 import { showMessage } from "siyuan";
 import { get } from "svelte/store";
 import PluginInboxLight from "@/index";
@@ -112,17 +114,17 @@ export class SettingService {
             }
         });
 
-        // // 替换内置收集箱
-        // this.settingUtils.addItem({
-        //     key: "replaceBuiltIn",
-        //     value: false,
-        //     type: "checkbox",
-        //     title: i18nSetting["replaceBuiltIn"]["title"],
-        //     description: i18nSetting["replaceBuiltIn"]["description"],
-        //     action: {
-        //         callback: () => this.actionCheckbox("replaceBuiltIn")
-        //     }
-        // });
+        // 替换内置收集箱
+        this.settingUtils.addItem({
+            key: "replaceBuiltIn",
+            value: false,
+            type: "checkbox",
+            title: i18nSetting["replaceBuiltIn"]["title"],
+            description: i18nSetting["replaceBuiltIn"]["description"],
+            action: {
+                callback: () => this.actionCheckbox("replaceBuiltIn")
+            }
+        });
 
     }
 

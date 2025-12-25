@@ -1,3 +1,6 @@
+/**
+ * 插件入口
+ */
 import { Plugin } from "siyuan";
 import { FileManager } from "@/worker/fileManager";
 import { InboxManager } from "@/worker/inboxManager";
