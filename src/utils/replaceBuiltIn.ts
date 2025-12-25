@@ -33,7 +33,7 @@ export class ReplaceBuiltIn {
             langText: "Inbox Transfer",
             hotkey: this.keyOriginal,
             callback: () => {
-                const elem = document.querySelector(`span[data-type="${this.plugin.name}__dock-icon"]`) as HTMLElement;
+                const elem = document.querySelector(`span[data-type="${this.plugin.name}__dock-tab"]`) as HTMLElement;
                 elem?.click();
             }
         });
@@ -44,7 +44,7 @@ export class ReplaceBuiltIn {
      */
     replaceOnLayoutReady() {
         // 点击最小化内置收集箱图标
-        const elem = document.querySelector(`div.file-tree.sy__inbox:not(.${this.plugin.name}__dock-tab) span[data-type="min"]`) as HTMLElement;
+        const elem = document.querySelector(`div.file-tree.sy__inbox:not(.sy__${this.plugin.name}__dock-tab) span[data-type="min"]`) as HTMLElement;
         logger.logDebug("点击最小化内置收集箱图标", elem);
         elem?.click();
         // 隐藏内置收集箱图标

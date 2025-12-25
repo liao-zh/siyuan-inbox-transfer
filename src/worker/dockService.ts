@@ -26,10 +26,12 @@ export class DockService {
             data: {
                 plugin: this.plugin,
             },
-            type: "__dock-icon",
+            type: "__dock-tab",
             resize() {},
             update() {},
             init() {
+                // 创建容器类，会自动加上.sy__${this.plugin.name}__dock-tab
+                this.element.classList.add("fn__flex-column", "file-tree");
                 // 清空容器
                 this.element.innerHTML = '';
                 // 加载svelte组件
