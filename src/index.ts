@@ -14,7 +14,7 @@ import * as logger from "@/utils/logger";
 /**
  * 插件主类
  */
-export default class PluginInboxLight extends Plugin {
+export default class PluginInboxTransfer extends Plugin {
     fileManager: FileManager;
     inboxManager: InboxManager;
     settingService: SettingService;

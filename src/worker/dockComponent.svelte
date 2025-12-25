@@ -4,12 +4,12 @@
 <script lang="ts">
     import { adaptHotkey, expandDocTree } from "siyuan";
     import { onDestroy } from 'svelte';
-    import PluginInboxLight from "@/index";
+    import PluginInboxTransfer from "@/index";
     import { type IDoc } from "@/worker/fileManager";
     import * as logger from "@/utils/logger";
 
     // 组件属性
-    let { plugin }: { plugin: PluginInboxLight } = $props();
+    let { plugin }: { plugin: PluginInboxTransfer } = $props();
 
     // i18n文本
     let i18nDock = $derived(plugin.i18n.dock);

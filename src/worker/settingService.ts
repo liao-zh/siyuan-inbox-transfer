@@ -3,7 +3,7 @@
  */
 import { showMessage } from "siyuan";
 import { get } from "svelte/store";
-import PluginInboxLight from "@/index";
+import PluginInboxTransfer from "@/index";
 import { SettingUtils } from "@/libs/setting-utils";
 import * as logger from "@/utils/logger";
 
@@ -15,9 +15,9 @@ import * as logger from "@/utils/logger";
  */
 export class SettingService {
     private settingUtils: SettingUtils;
-    private plugin: PluginInboxLight;
+    private plugin: PluginInboxTransfer;
 
-    constructor(plugin: PluginInboxLight) {
+    constructor(plugin: PluginInboxTransfer) {
         this.plugin = plugin;
         // 初始化设置
         this.initSettingUtils();

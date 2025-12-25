@@ -3,13 +3,13 @@
  */
 import { mount } from "svelte";
 // import { adaptHotkey } from "siyuan";
-import PluginInboxLight from "@/index";
+import PluginInboxTransfer from "@/index";
 import DockComponent from "@/worker/dockComponent.svelte";
 
 export class DockService {
-    private plugin: PluginInboxLight;
+    private plugin: PluginInboxTransfer;
 
-    constructor(plugin: PluginInboxLight) {
+    constructor(plugin: PluginInboxTransfer) {
         this.plugin = plugin;
         this.initDock();
     }

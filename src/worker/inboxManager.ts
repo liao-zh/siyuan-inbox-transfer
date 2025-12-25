@@ -2,7 +2,7 @@
  * 收集箱管理器
  */
 import { get } from "svelte/store";
-import PluginInboxLight from "@/index";
+import PluginInboxTransfer from "@/index";
 import { request } from "@/utils/api";
 import * as logger from "@/utils/logger";
 
@@ -35,10 +35,10 @@ interface IShorthand {
  * @method updateAndMove 更新收集箱并移动到目标文件夹
  */
 export class InboxManager {
-    private plugin: PluginInboxLight;
+    private plugin: PluginInboxTransfer;
     private shorthands: IShorthand[] = [];
 
-    constructor(plugin: PluginInboxLight) {
+    constructor(plugin: PluginInboxTransfer) {
         this.plugin = plugin;
     }
 

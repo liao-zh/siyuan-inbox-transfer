@@ -3,7 +3,7 @@
  */
 import { openTab, type IEventBusMap, confirm } from "siyuan";
 import { writable, get } from "svelte/store";
-import PluginInboxLight from "@/index";
+import PluginInboxTransfer from "@/index";
 import { request, sql, getNotebookConf, removeDoc } from "@/utils/api";
 import * as logger from "@/utils/logger";
 
@@ -48,13 +48,13 @@ export interface IDoc {
  * @method openChildDocs(childDocIds) 打开子文档列表
  */
 export class FileManager {
-    private plugin: PluginInboxLight;
+    private plugin: PluginInboxTransfer;
     targetIsValid = writable<boolean>(false);
     targetInfo: null|ITarget = null;
     docs = writable<IDoc[]>([]);
     private updateHandlerRef = this.updateHandler.bind(this);
 
-    constructor(plugin: PluginInboxLight) {
+    constructor(plugin: PluginInboxTransfer) {
         this.plugin = plugin;
     }
 

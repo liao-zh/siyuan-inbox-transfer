@@ -2,7 +2,7 @@
  * 替换默认收集箱
  * 代码参考：[书签+插件](https://github.com/frostime/sy-bookmark-plus)
  */
-import PluginInboxLight from "@/index";
+import PluginInboxTransfer from "@/index";
 import * as logger from "@/utils/logger";
 
 /**
@@ -11,11 +11,11 @@ import * as logger from "@/utils/logger";
  * @method restore 恢复内置收集箱
  */
 export class ReplaceBuiltIn {
-    private plugin: PluginInboxLight;
+    private plugin: PluginInboxTransfer;
     private keyInbox = window.siyuan.config.keymap.general.inbox;
     private keyOriginal: string;
 
-    constructor(plugin: PluginInboxLight) {
+    constructor(plugin: PluginInboxTransfer) {
         this.plugin = plugin;
         this.keyOriginal = this.keyInbox.custom || this.keyInbox.default;
     }
