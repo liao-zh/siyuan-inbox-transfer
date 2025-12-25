@@ -6,7 +6,7 @@ import { FileManager } from "@/worker/fileManager";
 import { InboxManager } from "@/worker/inboxManager";
 import { SettingService } from "@/worker/settingService";
 import { DockService } from "@/worker/dockService";
-import { Svgs } from "@/icons/svgs";
+import { svgs } from "@/icons/svgs";
 import { ReplaceBuiltIn } from "@/utils/replaceBuiltIn";
 import * as logger from "@/utils/logger";
 
@@ -25,8 +25,7 @@ export default class PluginInboxTransfer extends Plugin {
         logger.logInfo("加载插件");
 
         // 添加图标
-        let svgs = Object.values(Svgs);
-        this.addIcons(svgs.join(''));
+        this.addIcons(svgs);
 
         // 构建模块
         this.settingService = new SettingService(this);
