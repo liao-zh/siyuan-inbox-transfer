@@ -156,8 +156,8 @@
     });
 </script>
 
-<!-- 容器元素：复用内置收集箱，加入.plugin__inbox_transfer类作为标识 -->
-<div class="fn__flex-column file-tree sy__inbox plugin__inbox_transfer" style="height: 100%; overflow: hidden;">
+<!-- 容器元素：复用内置收集箱，加入.{plugin.name}__dock-tab类作为标识 -->
+<div class="fn__flex-column file-tree sy__inbox {plugin.name}__dock-tab" style="height: 100%; overflow: hidden;">
     <!-- dock顶栏 -->
     <div class="block__icons" style="flex-shrink: 0; overflow-x: auto; white-space: nowrap;">
         <!-- 标题 -->

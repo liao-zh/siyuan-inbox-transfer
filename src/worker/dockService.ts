@@ -26,7 +26,7 @@ export class DockService {
             data: {
                 plugin: this.plugin,
             },
-            type: "::dock",
+            type: "__dock-icon",
             resize() {},
             update() {},
             init() {
