@@ -17,7 +17,7 @@ setting:
     description: "Enable to delete all items in the inbox that have been transfered after refreshing. Enable for a faster workflow."
   replaceBuiltIn:
     title: "Replace Built-in Inbox"
-    description: "Enable to replace the built-in inbox panel and shortcut. Disable to restore the built-in inbox."
+    description: "Enable to replace the built-in inbox dock and keymap (default Alt+6). Disable to restore the built-in inbox. Restart required."
 dock:
   title: "Inbox Transfer"
   targetInvalid: "Target transfer station is invalid. Please go to settings first!"

@@ -2,7 +2,7 @@
   "name": "siyuan-inbox-transfer",
   "author": "liao-zh",
   "url": "https://gitee.com/liao_zh/siyuan-inbox-transfer",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "minAppVersion": "3.0.12",
   "backends": [
     "windows",

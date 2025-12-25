@@ -26,7 +26,7 @@ export class DockService {
             data: {
                 plugin: this.plugin,
             },
-            type: ":dock_tab",
+            type: "::dock",
             resize() {},
             update() {},
             init() {

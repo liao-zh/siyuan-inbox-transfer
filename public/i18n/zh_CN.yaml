@@ -17,7 +17,7 @@ setting:
     description: "选项开启后，点击刷新后会自动从收集箱中删除所有已中转的条目。关闭可以简化工作流。"
   replaceBuiltIn:
     title: "替换内置收集箱"
-    description: "选项开启后，本插件会替换内置收集箱的面板和快捷键。关闭后，恢复内置收集箱。"
+    description: "选项开启后，本插件会替换内置收集箱的dock栏和快捷键（默认Alt+6）。关闭后，恢复内置收集箱。重启后生效。"
 dock:
   title: "收集中转站"
   targetInvalid: "中转站路径无效，请先前往设置！"
