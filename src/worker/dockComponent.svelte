@@ -120,8 +120,8 @@
         // 打开面板的后处理
         if (success) {
             // 设置高亮（toggleModel后没有自动设置高亮）
-            const iconPlugin = document.querySelector(`div.dock__items span[data-type="${plugin.name}__dock-tab"]`) as HTMLElement;
-            const iconFile = document.querySelector(`div.dock__items span[data-type="file"]`) as HTMLElement;
+            const iconPlugin = document.querySelector(`div.dock span[data-type="${plugin.name}__dock-tab"]`) as HTMLElement;
+            const iconFile = document.querySelector(`div.dock span[data-type="file"]`) as HTMLElement;
             setTimeout(() => {
                 iconPlugin?.classList.remove("dock__item--activefocus");
                 iconFile?.classList.add("dock__item--activefocus");

@@ -47,7 +47,7 @@ export default class PluginInboxTransfer extends Plugin {
 
     }
 
-    async onLayoutReady() {
+    onLayoutReady() {
         logger.logInfo("布局就绪");
         // 替换内置收集箱
         if (this.settingService.get("replaceBuiltIn")) {
@@ -55,16 +55,16 @@ export default class PluginInboxTransfer extends Plugin {
         }
     }
 
-    async onunload() {
+    onunload() {
         logger.logInfo("关闭插件");
         // 插件清理
         this.fileManager.unbindHandler();
         this.replaceBuiltIn.restore();
     }
 
-    async uninstall() {
+    uninstall() {
         logger.logInfo("卸载插件");
-        await this.onunload();
+        this.onunload();
     }
 
 }
