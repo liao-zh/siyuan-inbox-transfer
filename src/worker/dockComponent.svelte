@@ -116,9 +116,20 @@
                 success = true;
             }
         }
-        if (!success) {
-            logger.logWarn("未定位到文档树面板，请手动打开");
+
+        // 打开面板的后处理
+        if (success) {
+            // 设置高亮（toggleModel后没有自动设置高亮）
+            const iconPlugin = document.querySelector(`div.dock__items span[data-type="${plugin.name}__dock-tab"]`) as HTMLElement;
+            const iconFile = document.querySelector(`div.dock__items span[data-type="file"]`) as HTMLElement;
+            setTimeout(() => {
+                iconPlugin?.classList.remove("dock__item--activefocus");
+                iconFile?.classList.add("dock__item--activefocus");
+            }, 10);
         }
+        else {
+            logger.logWarn("未在dock栏找到文档树面板，请手动打开");
+        };
 
         // 定位选中的文档
         expandDocTree({ id: plugin.fileManager.targetInfo.id, isSetCurrent: true });
