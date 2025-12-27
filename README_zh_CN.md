@@ -38,6 +38,7 @@ Gitee仓库：[siyuan-inbox-transfer](https://gitee.com/liao_zh/siyuan-inbox-tra
 - 替换内置收集箱：可选择替换内置收集箱的dock栏和快捷键（默认Alt+6），重启后生效。
 
 其它功能说明：
+- dock栏快捷键：默认Shift+Alt+6，替换内置收集箱后为Alt+6，可在设置中修改。
 - 打开文档：Alt+单击时在右侧新页签打开，Ctrl+单击时在后台打开，二者可同时使用。
 
 ## 代码说明
