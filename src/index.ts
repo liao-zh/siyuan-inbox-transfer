@@ -7,9 +7,38 @@ import { InboxManager } from "@/worker/inboxManager";
 import { SettingService } from "@/worker/settingService";
 import { DockService } from "@/worker/dockService";
 import { svgs } from "@/icons/svgs";
-import { ReplaceBuiltIn } from "@/utils/replaceBuiltIn";
+import { updateStyleDom, removeStyleDom } from "@/utils/replaceBuiltIn";
 import * as logger from "@/utils/logger";
 
+const useSiyuanInbox = () => {
+    const inboxKeymap = window.siyuan.config.keymap.general.inbox;
+    const initial = inboxKeymap.custom || inboxKeymap.default;
+
+    return {
+        initial,
+        replaceOnLoad: () => {
+            // 替换默认的快捷键
+            inboxKeymap.custom = '';
+        },
+        replaceOnLayoutReady: () => {
+            // 点击最小化内置收集箱图标
+            const elem = document.querySelector(`div.file-tree.sy__inbox span[data-type="min"]`) as HTMLElement;
+            elem?.click();
+            // 隐藏内置收集箱图标
+            updateStyleDom('hide-inbox', `
+                div.dock span[data-type="inbox"] {
+                    display: none;
+                }
+            `);
+        },
+        // 恢复
+        restore: () => {
+            // 恢复默认的快捷键
+            inboxKeymap.custom = initial;
+            removeStyleDom('hide-inbox');
+        }
+    }
+}
 
 /**
  * 插件主类
@@ -19,7 +48,7 @@ export default class PluginInboxTransfer extends Plugin {
     inboxManager: InboxManager;
     settingService: SettingService;
     dockService: DockService;
-    private replaceBuiltIn: ReplaceBuiltIn;
+    private inboxKeymap = useSiyuanInbox();
 
     async onload() {
         logger.logInfo("加载插件");
@@ -32,7 +61,7 @@ export default class PluginInboxTransfer extends Plugin {
         this.inboxManager = new InboxManager(this);
         this.fileManager = new FileManager(this);
         this.dockService = new DockService(this);
-        this.replaceBuiltIn = new ReplaceBuiltIn(this);
+        // this.replaceBuiltIn = new ReplaceBuiltIn(this);
 
         // 初始化
         await this.settingService.load();
@@ -42,7 +71,10 @@ export default class PluginInboxTransfer extends Plugin {
 
         // 替换内置收集箱
         if (this.settingService.get("replaceBuiltIn")) {
-            this.replaceBuiltIn.replaceOnLoad();
+            this.inboxKeymap.replaceOnLoad();
+            this.dockService.initDock(this.inboxKeymap.initial);
+        } else {
+            this.dockService.initDock();
         }
 
     }
@@ -51,7 +83,7 @@ export default class PluginInboxTransfer extends Plugin {
         logger.logInfo("布局就绪");
         // 替换内置收集箱
         if (this.settingService.get("replaceBuiltIn")) {
-            this.replaceBuiltIn.replaceOnLayoutReady();
+            this.inboxKeymap.replaceOnLayoutReady();
         }
     }
 
@@ -59,7 +91,7 @@ export default class PluginInboxTransfer extends Plugin {
         logger.logInfo("关闭插件");
         // 插件清理
         this.fileManager.unbindHandler();
-        this.replaceBuiltIn.restore();
+        this.inboxKeymap.restore();
     }
 
     uninstall() {

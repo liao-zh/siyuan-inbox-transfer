@@ -2,7 +2,6 @@
  * dock栏设置服务
  */
 import { mount } from "svelte";
-// import { adaptHotkey } from "siyuan";
 import PluginInboxTransfer from "@/index";
 import DockComponent from "@/worker/dockComponent.svelte";
 
@@ -11,17 +10,17 @@ export class DockService {
 
     constructor(plugin: PluginInboxTransfer) {
         this.plugin = plugin;
-        this.initDock();
+        // this.initDock();
     }
 
-    initDock() {
+    initDock(hotkey: string = "⌥⇧6") {
         this.plugin.addDock({
             config: {
                 position: "LeftBottom",
                 size: { width: 300, height: 300 },
                 icon: "iconInboxTransfer",
                 title: this.plugin.i18n.dock["title"],
-                // hotkey: adaptHotkey("⇧⌥6"),
+                hotkey: hotkey,
             },
             data: {
                 plugin: this.plugin,
