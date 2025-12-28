@@ -66,8 +66,6 @@ export default class PluginInboxTransfer extends Plugin {
         // 初始化
         await this.settingService.load();
         await this.fileManager.setTarget(this.settingService.get("targetId"));
-        this.fileManager.bindHandler();
-        await this.fileManager.updateDocs();
 
         // 替换内置收集箱
         let hotkey = "⌥⇧6";
@@ -92,7 +90,6 @@ export default class PluginInboxTransfer extends Plugin {
             resize() { },
             update() { },
             init() {
-                logger.logWarn("初始化dock栏");
                 // 创建容器类，会自动加上.sy__${this.plugin.name}__dock-tab
                 this.element.classList.add("fn__flex-column", "file-tree");
                 // 清空容器
@@ -109,8 +106,10 @@ export default class PluginInboxTransfer extends Plugin {
         });
     }
 
-    onLayoutReady() {
+    async onLayoutReady() {
         logger.logInfo("布局就绪");
+        this.fileManager.bindHandler();
+        await this.fileManager.updateDocs();
         // 替换内置收集箱
         if (this.settingService.get("replaceBuiltIn")) {
             replaceBuiltin.replaceOnLayoutReady();
