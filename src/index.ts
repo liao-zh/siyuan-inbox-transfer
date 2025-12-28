@@ -8,49 +8,21 @@ import { InboxManager } from "@/worker/inboxManager";
 import { SettingService } from "@/worker/settingService";
 import DockComponent from "@/worker/dockComponent.svelte";
 import { svgs } from "@/icons/svgs";
-import { updateStyleDom, removeStyleDom } from "@/utils/DOMUtils";
+import { ReplaceBuiltIn } from "@/utils/replaceBuiltIn";
 import * as logger from "@/utils/logger";
 
 
-const ReplaceBuiltIn = () => {
-    const inboxKeymap = window.siyuan.config.keymap.general.inbox;
-    const keyInit = inboxKeymap.custom || inboxKeymap.default;
 
-    return {
-        keyInit,
-        // 替换内置收集箱：在插件加载时执行
-        replaceOnLoad: () => {
-            inboxKeymap.custom = '';
-        },
-        // 替换内置收集箱：在布局就绪时执行
-        replaceOnLayoutReady: () => {
-            // 点击最小化内置收集箱图标
-            const elem = document.querySelector(`div.file-tree.sy__inbox span[data-type="min"]`) as HTMLElement;
-            elem?.click();
-            // 隐藏内置收集箱图标
-            updateStyleDom('hide-inbox', `
-                div.dock span[data-type="inbox"] {
-                    display: none;
-                }
-            `);
-        },
-        // 恢复内置收集箱
-        restore: () => {
-            inboxKeymap.custom = keyInit;
-            removeStyleDom('hide-inbox');
-        }
-    }
-}
 
-const replaceBuiltin = ReplaceBuiltIn();
 
 /**
  * 插件主类
- */
+*/
 export default class PluginInboxTransfer extends Plugin {
-    fileManager: FileManager;
-    inboxManager: InboxManager;
-    settingService: SettingService;
+    fileManager = new FileManager(this); // 文件管理器
+    inboxManager = new InboxManager(this); // 收集箱管理器
+    settingService = new SettingService(this); // 设置服务
+    private replaceBuiltin = new ReplaceBuiltIn(); // 替换内置收集箱
 
     async onload() {
         logger.logInfo("加载插件");
@@ -58,23 +30,19 @@ export default class PluginInboxTransfer extends Plugin {
         // 添加图标
         this.addIcons(svgs);
 
-        // 构建模块
-        this.settingService = new SettingService(this);
-        this.inboxManager = new InboxManager(this);
-        this.fileManager = new FileManager(this);
-
         // 初始化
         await this.settingService.load();
         await this.fileManager.setTarget(this.settingService.get("targetId"));
+        await this.fileManager.updateDocs();
 
         // 替换内置收集箱
         let hotkey = "⌥⇧6";
         if (this.settingService.get("replaceBuiltIn")) {
-            replaceBuiltin.replaceOnLoad();
-            hotkey = replaceBuiltin.keyInit;
+            this.replaceBuiltin.replaceOnLoad();
+            hotkey = this.replaceBuiltin.keyInit;
         }
 
-        // 初始化dock栏
+        // 添加dock栏
         this.addDock({
             config: {
                 position: "LeftBottom",
@@ -106,21 +74,22 @@ export default class PluginInboxTransfer extends Plugin {
         });
     }
 
-    async onLayoutReady() {
+    onLayoutReady() {
         logger.logInfo("布局就绪");
+        // 文档管理器
         this.fileManager.bindHandler();
-        await this.fileManager.updateDocs();
         // 替换内置收集箱
         if (this.settingService.get("replaceBuiltIn")) {
-            replaceBuiltin.replaceOnLayoutReady();
+            this.replaceBuiltin.replaceOnLayoutReady();
         }
     }
 
     onunload() {
         logger.logInfo("关闭插件");
-        // 插件清理
+        // 文档管理器
         this.fileManager.unbindHandler();
-        replaceBuiltin.restore();
+        // 恢复内置收集箱
+        this.replaceBuiltin.restore();
     }
 
     uninstall() {
