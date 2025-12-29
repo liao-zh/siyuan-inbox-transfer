@@ -72,6 +72,10 @@ export default class PluginInboxTransfer extends Plugin {
             },
             destroy() { },
         });
+
+        // 尝试定位dock不生效的问题
+        logger.logDebug("替换内置", this.settingService.get("replaceBuiltIn"), hotkey);
+        logger.logDebug("尝试addDock", this.docks);
     }
 
     onLayoutReady() {
