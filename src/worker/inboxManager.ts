@@ -78,7 +78,7 @@ export class InboxManager {
             this.shorthands = this.shorthands.concat(data.data.shorthands);
         }
 
-        logger.logDebug("收集箱刷新", this.shorthands);
+        // logger.logDebug("收集箱刷新", this.shorthands);
     }
 
     /**
@@ -142,7 +142,7 @@ export class InboxManager {
         }
 
         // 创建文档
-        logger.logDebug("从收集箱条目创建文档", hpath);
+        // logger.logDebug("从收集箱条目创建文档", hpath);
         await request(
             '/api/filetree/createDocWithMd',
             {
@@ -162,7 +162,7 @@ export class InboxManager {
         // 所有收集箱条目ID
         let oIds = this.shorthands.map(shorthand => shorthand.oId);
         // 删除所有条目
-        logger.logDebug("删除收集箱条目", oIds);
+        // logger.logDebug("删除收集箱条目", oIds);
         await request("/api/inbox/removeShorthands", {ids: oIds});
         // 更新条目列表
         this.shorthands = [];

@@ -122,7 +122,7 @@ export class FileManager {
         // logger.logDebug("ws-main事件：", event.detail.cmd);
         const cmdTypes = ["create", "removeDoc", "moveDoc", "rename"];
         if (cmdTypes.includes(event.detail.cmd)) {
-            logger.logDebug(`触发事件：ws-main(${event.detail.cmd})"`, event);
+            // logger.logDebug(`触发事件：ws-main(${event.detail.cmd})"`, event);
             await this.updateDocs();
         }
     }
@@ -152,7 +152,7 @@ export class FileManager {
             id: item.id,
             path: item.path
         })));
-        logger.logDebug("获取中转文档列表", get(this.docs));
+        // logger.logDebug("获取中转文档列表", get(this.docs));
     }
 
     /**
@@ -188,12 +188,12 @@ export class FileManager {
                     window.siyuan.languages.deleteOpConfirm,
                     this.plugin.i18n.common["delDocConfirmDesc"],
                     async () => {
-                        logger.logDebug("删除中转文档", docIds);
+                        // logger.logDebug("删除中转文档", docIds);
                         await Promise.all(docIds.map(docId => this.removeDoc(docId)));
                     }
                 )
             } else {
-                logger.logDebug("删除中转文档", docIds);
+                // logger.logDebug("删除中转文档", docIds);
                 await Promise.all(docIds.map(docId => this.removeDoc(docId)));
             }
         }
@@ -206,7 +206,7 @@ export class FileManager {
      * @returns 无
      */
     openDocs(docIds: string[], event: MouseEvent) {
-        logger.logDebug("打开中转文档", docIds);
+        // logger.logDebug("打开中转文档", docIds);
         // 同时打开多个文档
         docIds.forEach((docId, index) => {
             // 延迟打开，避免同时打开过多标签页导致性能问题
