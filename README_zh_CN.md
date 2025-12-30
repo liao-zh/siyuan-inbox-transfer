@@ -51,7 +51,6 @@ src/
 │   ├── settingService.ts：设置服务，负责处理设置的读取、写入和默认值
 │   ├── inboxManager.ts：收集箱管理器，负责获取收集箱条目，并新建为中转文档
 │   ├── fileManager.ts：文件管理器，负责获取中转站信息，并处理中转文档的更新、打开、删除等操作
-│   ├── dockService.ts：dock服务，负责添加插件dock栏
 |   ├── dockComponent.svelte：dock栏组件具体内容，用svelte处理UI和函数操作
 ├── utils/：提供工具
 │   ├── api.ts：思源API的封装（来自模板）
@@ -61,8 +60,9 @@ src/
 
 ## 问题
 
-支持的平台：暂时不支持移动端。
+暂时不支持移动端。
 
+有时在dock栏不显示图标，需要重启几次。
 
 ## 参考
 

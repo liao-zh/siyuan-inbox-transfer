@@ -45,7 +45,7 @@ export default class PluginInboxTransfer extends Plugin {
         // 添加dock栏
         this.addDock({
             config: {
-                position: "LeftBottom",
+                position: "LeftTop",
                 size: { width: 300, height: 300 },
                 icon: "iconInboxTransfer",
                 title: this.i18n.dock["title"],
