@@ -30,10 +30,8 @@ export default class PluginInboxTransfer extends Plugin {
         // 添加图标
         this.addIcons(svgs);
 
-        // 初始化
+        // 加载设置
         await this.settingService.load();
-        await this.fileManager.setTarget(this.settingService.get("targetId"));
-        await this.fileManager.updateDocs();
 
         // 替换内置收集箱
         let hotkey = "⌥⇧6";
@@ -73,19 +71,21 @@ export default class PluginInboxTransfer extends Plugin {
             destroy() { },
         });
 
-        // 尝试定位dock不生效的问题
-        logger.logDebug("替换内置", this.settingService.get("replaceBuiltIn"), hotkey);
-        logger.logDebug("尝试addDock", this.docks);
     }
 
-    onLayoutReady() {
+    async onLayoutReady() {
         logger.logInfo("布局就绪");
-        // 文档管理器
-        this.fileManager.bindHandler();
+
         // 替换内置收集箱
         if (this.settingService.get("replaceBuiltIn")) {
             this.replaceBuiltin.replaceOnLayoutReady();
         }
+
+        // 文档管理器设置
+        await this.fileManager.setTarget(this.settingService.get("targetId"));
+        await this.fileManager.updateDocs();
+        this.fileManager.bindHandler();
+
     }
 
     onunload() {
