@@ -1,9 +1,9 @@
 {
   "name": "siyuan-inbox-transfer",
   "author": "liao-zh",
-  "url": "https://gitee.com/liao_zh/siyuan-inbox-transfer",
-  "version": "0.3.7",
-  "minAppVersion": "3.0.12",
+  "url": "https://github.com/liao-zh/siyuan-inbox-transfer",
+  "version": "0.3.8",
+  "minAppVersion": "3.5.0",
   "backends": [
     "windows",
     "linux",
@@ -18,28 +18,21 @@
     "browser-desktop",
     "desktop-window"
   ],
+  "disabledInPublish": true,
   "displayName": {
-    "en_US": "Inbox Transfer",
+    "default": "Inbox Transfer",
     "zh_CN": "收集箱中转站"
   },
   "description": {
-    "en_US": "A Siyuan plugin to work as a transfer station for the inbox",
+    "default": "A Siyuan plugin to work as a transfer station for the inbox",
     "zh_CN": "用于简化收集箱中转站工作流的思源插件"
   },
   "readme": {
-    "en_US": "README.md",
+    "default": "README.md",
     "zh_CN": "README_zh_CN.md"
   },
-  "funding": {
-    "custom": [
-      ""
-    ]
-  },
   "keywords": [
-    "plugin",
     "inbox",
-    "transfer",
-    "收集箱",
-    "中转站"
+    "收集箱"
   ]
 }
