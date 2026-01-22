@@ -71,7 +71,7 @@ export class FileManager {
         } else {
             this.targetIsValid.set(false);
         }
-        logger.logDebug("设置中转站", this.targetInfo);
+        // logger.logDebug("设置中转站", this.targetInfo);
     }
 
     /**

@@ -163,7 +163,7 @@
             cleanupTarget();
             cleanupTarget = null;
         }
-        logger.logDebug('Dock组件已销毁');
+        // logger.logDebug('Dock组件已销毁');
     });
 </script>
 

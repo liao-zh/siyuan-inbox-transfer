@@ -51,7 +51,7 @@ export class SettingService {
                 callback: async () => {
                     // 从文本框读取设置值
                     let value = await this.settingUtils.takeAndSave("targetId");
-                    logger.logDebug(`设置：targetId`, value);
+                    // logger.logDebug(`设置：targetId`, value);
                     // 检查并设置目标id
                     await this.plugin.fileManager.setTarget(value);
                     await this.plugin.fileManager.updateDocs();
@@ -84,7 +84,7 @@ export class SettingService {
                 callback: () => {
                     // Read data in real time
                     let value = this.settingUtils.take("docTimePrefix");
-                    logger.logDebug(`设置：docTimePrefix`, value);
+                    // logger.logDebug(`设置：docTimePrefix`, value);
                 }
             }
         });
@@ -135,7 +135,7 @@ export class SettingService {
     private actionCheckbox(key: string) {
         let value = !this.settingUtils.get(key);
         this.settingUtils.setAndSave(key, value);
-        logger.logDebug(`设置：${key}`, value);
+        // logger.logDebug(`设置：${key}`, value);
     }
 
     /**

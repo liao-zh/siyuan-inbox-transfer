@@ -1,7 +1,7 @@
 /**
  * 插件入口
  */
-import { Plugin } from "siyuan";
+import { Plugin, showMessage } from "siyuan";
 import { mount } from "svelte";
 import { FileManager } from "@/worker/fileManager";
 import { InboxManager } from "@/worker/inboxManager";
@@ -98,7 +98,12 @@ export default class PluginInboxTransfer extends Plugin {
 
     uninstall() {
         logger.logInfo("卸载插件");
-        this.onunload();
+
+        // 卸载插件时删除插件数据
+        // https://github.com/siyuan-note/plugin-sample/blob/ca751dedb8f9e6d2b1db64c25b98f4f5cf3a2773/src/index.ts#L263-L269
+        this.removeData("menu_config").catch(e => {
+            showMessage(`uninstall [${this.name}] remove data ["menu_config"] fail: ${e.msg}`);
+        });
     }
 
 }
