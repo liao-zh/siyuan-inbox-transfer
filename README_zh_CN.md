@@ -73,5 +73,5 @@ src/
 
 手动安装插件：
 - 下载并解压package.zip，重命名为`siyuan-inbox-transfer`，移动到`<思源工作空间>/data/plugins/`目录下。
-- 在思源笔记中，点击`设置->集市->插件`，找到`收集箱中转站（siyuan-inbox-transfer）`，点击`启用`。
+- 在思源笔记中，点击`设置->集市->已下载->插件`，找到`收集箱中转站（siyuan-inbox-transfer）`，点击`启用`。
 

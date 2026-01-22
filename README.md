@@ -71,4 +71,4 @@ src/
 
 Manual installation of the plugin:
 - Download and unzip package.zip, rename it to `siyuan-inbox-transfer`, and move it to `<SiYuan workspace>/data/plugins/` directory.
-- In SiYuan Note, click `Settings->Marketplace->Plugins`, find `Inbox Transfer (siyuan-inbox-transfer)`, and click `Enable`.
+- In SiYuan Note, click `Settings->Marketplace->Downloaded->Plugins`, find `Inbox Transfer (siyuan-inbox-transfer)`, and click `Enable`.

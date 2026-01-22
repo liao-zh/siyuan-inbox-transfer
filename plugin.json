@@ -2,7 +2,7 @@
   "name": "siyuan-inbox-transfer",
   "author": "liao-zh",
   "url": "https://github.com/liao-zh/siyuan-inbox-transfer",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "minAppVersion": "3.5.0",
   "backends": [
     "all"
