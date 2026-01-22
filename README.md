@@ -40,8 +40,7 @@ Main and recent update history:
 - 0.4.0: Uploaded to the bazaar.
 
 Existing issues:
-- Mobile terminal is not supported.
-- If the icon is not displayed in the dock, you can try restarting the software (or).
+- Mobile frontend is not supported.
 
 ## Acknowledgments
 
