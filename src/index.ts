@@ -44,7 +44,7 @@ export default class PluginInboxTransfer extends Plugin {
         this.addDock({
             config: {
                 position: "LeftTop",
-                size: { width: 300, height: 300 },
+                size: { width: 330, height: 0 },
                 icon: "iconInboxTransfer",
                 title: this.i18n.dock["title"],
                 hotkey: hotkey,
@@ -58,7 +58,9 @@ export default class PluginInboxTransfer extends Plugin {
             init() {
                 // 创建容器类，会自动加上.sy__${this.plugin.name}__dock-tab
                 this.element.classList.add("fn__flex-column", "file-tree");
-                // 清空容器
+                // 设置style
+                this.element.style.setProperty("overflow", "hidden", "important");  // overflow:hidden 以免出现y滚动条
+                // 清空容器内容
                 this.element.innerHTML = '';
                 // 加载svelte组件
                 mount(DockComponent, {

@@ -232,7 +232,7 @@
     </span>
 </div>
 <!-- 中转文档列表 -->
-<div class="fn__flex-column" style="flex: 1; overflow-y: auto;">
+<div class="fn__flex-1 fn__flex-column" style="min-height: 0; overflow-y: auto;">
     <ul class="b3-list b3-list--background">
         <!-- 中转站无效 -->
         {#if !targetIsValid}

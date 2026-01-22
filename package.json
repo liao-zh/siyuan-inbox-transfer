@@ -1,6 +1,6 @@
 {
   "name": "siyuan-inbox-transfer",
-  "version": "0.3.10",
+  "version": "0.4.0",
   "type": "module",
   "description": "A Siyuan plugin to work as a transfer station for the inbox",
   "repository": "https://github.com/liao-zh/siyuan-inbox-transfer",
