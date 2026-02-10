@@ -1,6 +1,7 @@
 /**
  * 收集箱管理器
  */
+// import { showMessage } from "siyuan";
 import { get } from "svelte/store";
 import PluginInboxTransfer from "@/index";
 import { request } from "@/utils/api";
@@ -28,6 +29,25 @@ interface IShorthand {
     shorthandURL: string;
     hCreated: string;
 }
+
+/**
+ * 替换文件名中的特殊字符
+ * 从思源代码中复制而来：
+ *   - siyuan/app/src/layout/dock/Inbox.ts: Inbox.move -> 调用replaceFileName
+ *   - siyuan\app\src\editor\rename.ts: replaceFileName 函数实现
+ * @param name 文件名
+ * @returns 替换后的文件名
+ */
+export const replaceFileName = (name: string) => {
+    // 将“/”替换为“／”，避免文件名中包含路径分隔符
+    if (name.indexOf("/") > -1) {
+        // showMessage(window.siyuan.languages.fileNameRule);
+        name = name.replace(/\//g, "／");
+    }
+    // 移除其他特殊字符，控制最大长度为512个字符（思源中的Constants.SIZE_TITLE）
+    name = name.replace(/\r\n|\r|\n|\u2028|\u2029|\t|/g, "").substring(0, 512);
+    return name;
+};
 
 /**
  * 收集箱管理器
@@ -117,20 +137,18 @@ export class InboxManager {
         // 设置文档信息
         const targetInfo = this.plugin.fileManager.targetInfo;
         // 设置标题
-        let title: string;
+        let title = replaceFileName(shorthand.shorthandTitle);
         const docTimePrefix = this.plugin.settingService.get("docTimePrefix");
         switch (docTimePrefix) {
             case "1": // 无前缀
-                title = shorthand.shorthandTitle;
                 break;
             case "2": // YYYY-MM-DD
-                title = shorthand.hCreated.split(" ")[0] + " " + shorthand.shorthandTitle;
+                title = shorthand.hCreated.split(" ")[0] + " " + title;
                 break;
             case "3": // YYYY-MM-DD HH:mm
-                title = shorthand.hCreated + " " + shorthand.shorthandTitle;
+                title = shorthand.hCreated + " " + title;
                 break;
             default:
-                title = shorthand.shorthandTitle;
                 break;
         }
         // 设置路径
