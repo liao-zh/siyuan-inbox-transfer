@@ -38,7 +38,7 @@ For the complete update history, see: [CHANGELOG](https://github.com/liao-zh/siy
 Main and recent update history:
 - 0.3.0: Improved basic functions, including inbox transfer and transfer file operations.
 - 0.4.0: Uploaded to the bazaar.
-- 0.4.1: Fixed the issue of invalid titles.
+- 0.4.2: Fixed the issue of invalid titles.
 
 Existing issues:
 - Mobile frontend is not supported.
