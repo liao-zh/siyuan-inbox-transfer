@@ -39,6 +39,7 @@ Main and recent update history:
 - 0.3.0: Improved basic functions, including inbox transfer and transfer file operations.
 - 0.4.0: Uploaded to the bazaar.
 - 0.4.2: Fixed the issue of invalid titles.
+- 0.5.0: Adapted to SiYuan v3.7.0.
 
 Existing issues:
 - Mobile frontend is not supported.
