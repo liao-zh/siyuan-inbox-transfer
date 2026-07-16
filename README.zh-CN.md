@@ -3,7 +3,7 @@
 
 作者：liao-zh
 
-链接：[GitHub仓库](https://github.com/liao-zh/siyuan-inbox-transfer)，[Gitee仓库](https://gitee.com/liao_zh/siyuan-inbox-transfer)
+链接：[GitHub仓库](https://github.com/liao-zh/siyuan-inbox-transfer)，[GitCode仓库](https://gitcode.com/liao-zh/siyuan-inbox-transfer)
 
 ## 缘起
 
@@ -42,6 +42,7 @@
 - 0.4.0：上架集市
 - 0.4.2：修复了无效标题的问题
 - 0.5.0：适配思源v3.7.0
+- 0.5.1：gitee迁移到gitcode
 
 存在的问题：
 - 不支持移动端

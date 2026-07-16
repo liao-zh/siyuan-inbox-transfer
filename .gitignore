@@ -1,6 +1,7 @@
 .idea
 .vscode
 .trae
+.bitfun
 .DS_Store
 pnpm-lock.yaml
 package-lock.json

@@ -2,7 +2,7 @@
 
 Author: liao-zh
 
-Links: [GitHub Repository](https://github.com/liao-zh/siyuan-inbox-transfer), [Gitee Repository](https://gitee.com/liao_zh/siyuan-inbox-transfer)
+Links: [GitHub Repository](https://github.com/liao-zh/siyuan-inbox-transfer), [GitCode Repository](https://gitcode.com/liao-zh/siyuan-inbox-transfer)
 
 ## Origin
 
@@ -40,6 +40,7 @@ Main and recent update history:
 - 0.4.0: Uploaded to the bazaar.
 - 0.4.2: Fixed the issue of invalid titles.
 - 0.5.0: Adapted to SiYuan v3.7.0.
+- 0.5.1: Migrated from Gitee to GitCode.
 
 Existing issues:
 - Mobile frontend is not supported.
