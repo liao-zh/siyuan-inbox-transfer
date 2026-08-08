@@ -9,6 +9,14 @@ setting:
     title: "中转文档时间前缀"
     description: "选项开启后，从收集箱条目新建文档时，中转文档名会加上时间前缀'YYYY-MM-DD HH:mm'。"
     noPrefix: "无前缀"
+  sortMode:
+    title: "面板文档排序"
+    description: "设置收集箱中转站面板中文档的显示排序方式。按收集时间排序使用插件记录的收集箱收集时间，未记录到的文档按创建时间参与排序。"
+    docTree: "文档树顺序"
+    collectedDesc: "收集时间（新到旧）"
+    collectedAsc: "收集时间（旧到新）"
+    nameAsc: "名称（A到Z）"
+    nameDesc: "名称（Z到A）"
   delDocConfirm:
     title: "中转文档删除确认"
     description: "选项开启后，删除中转文档时会弹窗确认。关闭可以简化工作流。"
@@ -25,6 +33,7 @@ dock:
   inboxEmpty: "暂无收集箱条目"
   selectAll: "全选"
   unSelectAll: "取消全选"
+  sort: "排序"
 common:
   targetInvalid: "中转站路径无效，请先前往设置！"
   delDocConfirmDesc: "确认删除选中的中转文档吗？"

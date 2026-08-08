@@ -27,11 +27,16 @@ export interface ITarget {
  * 中转文档接口
  * @property {string} name - 子文档名称
  * @property {string} id - 子文档ID
+ * @property {string} path - 子文档路径
+ * @property {number} created - 创建时间（Unix 秒），来自 listDocsByPath 返回的 ctime
+ * @property {number|null} collectedAt - 收集箱收集时间（Unix 秒），来自插件映射，可能为 null
  */
 export interface IDoc {
     name: string;
     id: string;
     path: string;
+    created: number;
+    collectedAt: number | null;
 }
 
 /**
@@ -53,6 +58,8 @@ export class FileManager {
     targetInfo: null|ITarget = null;
     docs = writable<IDoc[]>([]);
     private updateHandlerRef = this.updateHandler.bind(this);
+    // 收集箱收集时间映射：docId -> 收集时间（Unix 秒）
+    private collectedMap: { [docId: string]: number } = {};
 
     constructor(plugin: PluginInboxTransfer) {
         this.plugin = plugin;
@@ -147,12 +154,72 @@ export class FileManager {
             }
         );
         // 提取文档信息
-        this.docs.set(data.files.map(item => ({
+        const files = data.files;
+        this.docs.set(files.map(item => ({
             name: item.name.replace(/\.sy$/, ''),
             id: item.id,
-            path: item.path
+            path: item.path,
+            created: item.ctime,
+            collectedAt: this.collectedMap[item.id] ?? null,
         })));
+        // 清理映射中已不存在文档的条目（覆盖文档树删除、移出中转站等变动）
+        await this.pruneCollectedMap(new Set(files.map(item => item.id)));
         // logger.logDebug("获取中转文档列表", get(this.docs));
+    }
+
+    /**
+     * 加载收集箱收集时间映射
+     * @returns 无
+     */
+    async loadCollectedMap() {
+        const data = await this.plugin.loadData("collected_time.json");
+        const map: { [docId: string]: number } = {};
+        if (data && typeof data === "object" && !Array.isArray(data)) {
+            for (const [docId, value] of Object.entries(data)) {
+                // 仅保留有限数字，过滤损坏/异常值，避免流入排序比较
+                if (typeof value === "number" && Number.isFinite(value)) {
+                    map[docId] = value;
+                }
+            }
+        }
+        this.collectedMap = map;
+    }
+
+    /**
+     * 设置文档收集时间（更新内存并立即落盘，防意外退出丢失）
+     * @param docId 文档ID
+     * @param collectedAt 收集时间（Unix 秒）
+     * @returns 无
+     */
+    async setCollectedAt(docId: string, collectedAt: number) {
+        this.collectedMap[docId] = collectedAt;
+        await this.saveCollectedMap();
+    }
+
+    /**
+     * 清理映射中已不存在文档的条目（有删除才落盘）
+     * @param currentIds 当前中转文档ID集合
+     * @returns 无
+     */
+    async pruneCollectedMap(currentIds: Set<string>) {
+        let changed = false;
+        for (const docId of Object.keys(this.collectedMap)) {
+            if (!currentIds.has(docId)) {
+                delete this.collectedMap[docId];
+                changed = true;
+            }
+        }
+        if (changed) {
+            await this.saveCollectedMap();
+        }
+    }
+
+    /**
+     * 保存收集箱收集时间映射
+     * @returns 无
+     */
+    async saveCollectedMap() {
+        await this.plugin.saveData("collected_time.json", this.collectedMap);
     }
 
     /**

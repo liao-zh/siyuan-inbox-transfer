@@ -6,6 +6,7 @@
     import { onDestroy } from 'svelte';
     import PluginInboxTransfer from "@/index";
     import { type IDoc } from "@/worker/fileManager";
+    import { sortModeStore } from "@/worker/sortModeStore";
     import * as logger from "@/utils/logger";
 
     // 组件属性
@@ -68,6 +69,43 @@
     function unSelectAll() {
         selectedIds.clear();
         selectedIds = new Set();
+    }
+
+    // 排序相关
+    // 初始排序方式从持久化设置读取（懒初始化闭包，仅取初始值，之后由共享状态订阅更新）
+    let sortMode = $state<string>(() => plugin.settingService.get("sortMode") ?? "docTree");
+    // 按排序方式处理后的文档列表（仅影响面板显示顺序）
+    let sortedDocs = $derived(sortDocs(docs, sortMode));
+    // 订阅共享排序状态：设置面板保存、Dock 下拉变更均通过 store 同步
+    let cleanupSortMode: (() => void) | null = null;
+    $effect(() => {
+        const unsubscribe = sortModeStore.subscribe(value => {
+            sortMode = value;
+        });
+        cleanupSortMode = unsubscribe; // 保存清理函数
+        return unsubscribe; // 清理函数
+    });
+    // 按指定方式排序；收集时间未记录时回退按创建时间
+    function sortDocs(list: IDoc[], mode: string): IDoc[] {
+        const arr = [...list];
+        switch (mode) {
+            case "collectedDesc":
+                return arr.sort((a, b) => (b.collectedAt ?? b.created) - (a.collectedAt ?? a.created));
+            case "collectedAsc":
+                return arr.sort((a, b) => (a.collectedAt ?? a.created) - (b.collectedAt ?? b.created));
+            case "nameAsc":
+                return arr.sort((a, b) => a.name.localeCompare(b.name, "zh-Hans-CN"));
+            case "nameDesc":
+                return arr.sort((a, b) => b.name.localeCompare(a.name, "zh-Hans-CN"));
+            default: // docTree：文档树顺序
+                return arr;
+        }
+    }
+    // 排序下拉变更：写入共享状态并持久化
+    function sortChangeHandler(event: Event) {
+        const value = (event.target as HTMLSelectElement).value;
+        sortModeStore.set(value);
+        plugin.settingService.setAndSave("sortMode", value);
     }
 
     // 整体事件
@@ -167,6 +205,10 @@
             cleanupTarget();
             cleanupTarget = null;
         }
+        if (cleanupSortMode) {
+            cleanupSortMode();
+            cleanupSortMode = null;
+        }
         // logger.logDebug('Dock组件已销毁');
     });
 </script>
@@ -219,7 +261,7 @@
         <!-- 全选 -->
         <span class="fn__space"></span>
         <button
-            class="block__icon b3-tooltips b3-tooltips__w"
+            class="block__icon b3-tooltips b3-tooltips__s"
             aria-label="{isAllSelected ? i18nDock["unSelectAll"] : i18nDock["selectAll"]}"
             onclick={toggleSelectAll}>
             <svg><use xlink:href="#icon{isAllSelected ? 'Check' : 'Uncheck'}"></use></svg>
@@ -230,7 +272,7 @@
         <!-- 打开 -->
         <span class="fn__space"></span>
         <button
-            class="block__icon b3-tooltips b3-tooltips__w"
+            class="block__icon b3-tooltips b3-tooltips__s"
             aria-label="{window.siyuan.languages.openBy}"
             onclick={openHandler}>
             <svg><use xlink:href="#iconOpen"></use></svg>
@@ -238,11 +280,24 @@
         <!-- 删除 -->
         <span class="fn__space"></span>
         <button
-            class="block__icon b3-tooltips b3-tooltips__w"
+            class="block__icon b3-tooltips b3-tooltips__s"
             aria-label="{window.siyuan.languages.delete}"
             onclick={deleteHandler}>
             <svg><use xlink:href="#iconTrashcan"></use></svg>
         </button>
+        <!-- 排序 -->
+        <span class="fn__space"></span>
+        <span class="b3-tooltips b3-tooltips__s dock__sort-wrap" aria-label="{i18nDock["sort"]}">
+            <select
+                class="b3-select dock__sort-select"
+                onchange={sortChangeHandler}>
+                <option value="docTree" selected={sortMode === "docTree"}>{plugin.i18n.setting["sortMode"]["docTree"]}</option>
+                <option value="collectedDesc" selected={sortMode === "collectedDesc"}>{plugin.i18n.setting["sortMode"]["collectedDesc"]}</option>
+                <option value="collectedAsc" selected={sortMode === "collectedAsc"}>{plugin.i18n.setting["sortMode"]["collectedAsc"]}</option>
+                <option value="nameAsc" selected={sortMode === "nameAsc"}>{plugin.i18n.setting["sortMode"]["nameAsc"]}</option>
+                <option value="nameDesc" selected={sortMode === "nameDesc"}>{plugin.i18n.setting["sortMode"]["nameDesc"]}</option>
+            </select>
+        </span>
     </div>
     {/if}
     <!-- 滚动列表 -->
@@ -255,7 +310,7 @@
             {:else if docs.length === 0}
                 <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["inboxEmpty"]}</li>
             {:else}
-            {#each docs as doc (doc.id)}
+            {#each sortedDocs as doc (doc.id)}
                     <!-- 中转文档列表项 -->
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -321,5 +376,17 @@
         margin-left: 4px;
         opacity: 0.7;
         user-select: none;
+    }
+
+    /* 排序下拉：外包 span 推到工具栏右端，限制宽度避免撑破第二行工具栏 */
+    .dock__sort-wrap {
+        margin-left: auto;
+    }
+    .dock__sort-select {
+        width: 128px;
+        height: 24px;
+        line-height: 24px;
+        padding: 0 6px;
+        font-size: 12px;
     }
 </style>

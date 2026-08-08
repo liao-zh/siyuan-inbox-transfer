@@ -9,6 +9,14 @@ setting:
     title: "Document Time Prefix"
     description: "Enable to add the time prefix 'YYYY-MM-DD HH:mm' to the document name when creating a new document from the inbox."
     noPrefix: "No prefix"
+  sortMode:
+    title: "Panel Document Sorting"
+    description: "Set the display order of documents in the transfer station panel. Sorting by collected time uses the inbox collection time recorded by the plugin; documents without a recorded time are sorted by their creation time."
+    docTree: "Doc tree order"
+    collectedDesc: "Collected time (newest first)"
+    collectedAsc: "Collected time (oldest first)"
+    nameAsc: "Name (A to Z)"
+    nameDesc: "Name (Z to A)"
   delDocConfirm:
     title: "Confirm Document Deletion"
     description: "Enable to confirm deletion of documents. Disable for a faster workflow."
@@ -25,6 +33,7 @@ dock:
   inboxEmpty: "No items in the inbox."
   selectAll: "Select All"
   unSelectAll: "Undo Select All"
+  sort: "Sort"
 common:
   targetInvalid: "Target transfer station is invalid. Please go to settings first!"
   delDocConfirmDesc: "Are you sure you want to delete the selected documents?"

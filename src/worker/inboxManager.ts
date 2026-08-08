@@ -113,7 +113,7 @@ export class InboxManager {
         }
         // 移动所有文档
         else {
-            Promise.all(
+            await Promise.all(
                 this.shorthands.map(
                     shorthand => this.createDoc(shorthand)
                 )
@@ -161,7 +161,7 @@ export class InboxManager {
 
         // 创建文档
         // logger.logDebug("从收集箱条目创建文档", hpath);
-        await request(
+        const docId = await request(
             '/api/filetree/createDocWithMd',
             {
                 notebook: targetInfo.notebookId,
@@ -170,6 +170,12 @@ export class InboxManager {
                 markdown: md,
             }
         );
+        // 记录收集箱收集时间映射（立即落盘，防意外退出丢失）
+        if (docId) {
+            // hCreated 格式 "YYYY-MM-DD HH:mm"，空格转 T 后用本地时区解析
+            const collectedAt = Math.floor(new Date(shorthand.hCreated.replace(" ", "T")).getTime() / 1000);
+            await this.plugin.fileManager.setCollectedAt(docId, collectedAt);
+        }
     }
 
     /**

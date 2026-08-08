@@ -5,6 +5,7 @@ import { showMessage } from "siyuan";
 import { get } from "svelte/store";
 import PluginInboxTransfer from "@/index";
 import { SettingUtils } from "@/libs/setting-utils";
+import { sortModeStore } from "@/worker/sortModeStore";
 import * as logger from "@/utils/logger";
 
 /**
@@ -36,6 +37,8 @@ export class SettingService {
             height: "600px",
             callback: (data) => {
                 logger.logDebug("设置完成", data);
+                // 设置面板确认保存后，同步排序方式到共享状态（Dock 面板实时更新）
+                sortModeStore.set(data["sortMode"] ?? "docTree");
             }
         });
 
@@ -85,6 +88,29 @@ export class SettingService {
                     // Read data in real time
                     let value = this.settingUtils.take("docTimePrefix");
                     // logger.logDebug(`设置：docTimePrefix`, value);
+                }
+            }
+        });
+
+        // 面板文档排序方式
+        this.settingUtils.addItem({
+            key: "sortMode",
+            value: "docTree",
+            type: "select",
+            title: i18nSetting["sortMode"]["title"],
+            description: i18nSetting["sortMode"]["description"],
+            options: {
+                docTree: i18nSetting["sortMode"]["docTree"],
+                collectedDesc: i18nSetting["sortMode"]["collectedDesc"],
+                collectedAsc: i18nSetting["sortMode"]["collectedAsc"],
+                nameAsc: i18nSetting["sortMode"]["nameAsc"],
+                nameDesc: i18nSetting["sortMode"]["nameDesc"]
+            },
+            action: {
+                callback: () => {
+                    // Read data in real time
+                    let value = this.settingUtils.take("sortMode");
+                    // logger.logDebug(`设置：sortMode`, value);
                 }
             }
         });

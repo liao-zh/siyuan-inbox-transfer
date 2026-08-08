@@ -7,6 +7,7 @@ import { FileManager } from "@/worker/fileManager";
 import { InboxManager } from "@/worker/inboxManager";
 import { SettingService } from "@/worker/settingService";
 import DockComponent from "@/worker/dockComponent.svelte";
+import { sortModeStore } from "@/worker/sortModeStore";
 import { svgs } from "@/icons/svgs";
 import { ReplaceBuiltIn } from "@/utils/replaceBuiltIn";
 import * as logger from "@/utils/logger";
@@ -83,6 +84,12 @@ export default class PluginInboxTransfer extends Plugin {
             this.replaceBuiltin.replaceOnLayoutReady();
         }
 
+        // 加载收集箱收集时间映射
+        await this.fileManager.loadCollectedMap();
+
+        // 初始化排序方式共享状态（dock 组件经订阅自动同步）
+        sortModeStore.set(this.settingService.get("sortMode") ?? "docTree");
+
         // 文档管理器设置
         await this.fileManager.setTarget(this.settingService.get("targetId"));
         await this.fileManager.updateDocs();
@@ -92,6 +99,8 @@ export default class PluginInboxTransfer extends Plugin {
 
     onunload() {
         logger.logInfo("关闭插件");
+        // 尽力而为的兜底保存：setCollectedAt 已即时落盘，此调用仅覆盖内存异常变更
+        void this.fileManager.saveCollectedMap();
         // 文档管理器
         this.fileManager.unbindHandler();
         // 恢复内置收集箱
@@ -105,6 +114,10 @@ export default class PluginInboxTransfer extends Plugin {
         // https://github.com/siyuan-note/plugin-sample/blob/ca751dedb8f9e6d2b1db64c25b98f4f5cf3a2773/src/index.ts#L263-L269
         this.removeData("menu_config.json").catch(e => {
             logger.logWarn(`卸载时删除插件数据失败：${e.msg}`);
+        });
+        // 删除收集时间映射数据
+        this.removeData("collected_time.json").catch(e => {
+            logger.logWarn(`卸载时删除收集时间映射数据失败：${e.msg}`);
         });
     }
 
