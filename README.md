@@ -13,36 +13,44 @@ The intended workflow is that the transfer documents mainly serve as temporary s
 ## How to Use
 
 Setup before workflow:
+
 1. Create or select a document path as the transfer station
 2. Fill in the transfer station ID in the settings (click the document header menu or right-click the document in the document tree -> Copy -> Copy ID)
 
 Daily workflow:
+
 1. Refresh: Will complete the following operations in the background: get all inbox items, convert to documents and move to the transfer station, delete moved items from the inbox (optional)
 2. Transfer files: All files in the transfer station will be displayed in the dock panel for centralized operation. Note that inbox items are not displayed because they have been transferred
 3. File single selection/multiple selection/select all: Batch open files, organize content, and then batch delete files
 4. Locate the transfer station in the document tree (optional): Use the document tree's richer features to operate files
 
 Other settings:
+
 - Whether to use collection time as prefix when converting to document: You can use prefix to mark collection time
 - Whether to delete all inbox items after they are moved: You can choose not to delete when testing the plugin, so you need to delete them in the built-in inbox. It is recommended to choose to delete after the plugin is used stably
 - Replace built-in inbox: You can choose to replace the built-in inbox's dock and shortcut key (default Alt+6), which takes effect after restart
 
 Other function descriptions:
+
 - Dock shortcut key: Default is Shift+Alt+6, after replacing the built-in inbox, it is Alt+6, which can be modified in settings
 - Open document: Alt+click to open in a new tab on the right, Ctrl+click to open in the background, both can be used at the same time
+- Sort: The panel supports sorting by inbox collection time (newest/oldest first) or by name; documents without a recorded collection time are sorted by their creation time. The sort mode persists and stays in sync between the settings panel and the panel dropdown
 
 ## Version Updates
 
 For the complete update history, see: [CHANGELOG](https://github.com/liao-zh/siyuan-inbox-transfer/blob/master/CHANGELOG.md) (requires network access to GitHub).
 
 Main and recent update history:
+
 - 0.3.0: Improved basic functions, including inbox transfer and transfer file operations.
 - 0.4.0: Uploaded to the bazaar.
 - 0.4.2: Fixed the issue of invalid titles.
 - 0.5.0: Adapted to SiYuan v3.7.0.
 - 0.5.1: Migrated from Gitee to GitCode.
+- 0.6.0: Split the panel toolbar into two rows, added select-all count, and support sorting.
 
 Existing issues:
+
 - Mobile frontend is not supported.
 
 ## Acknowledgments
@@ -58,6 +66,7 @@ SiYuan Note source code's inbox module (`siyuan/app/src/layout/dock/Inbox.ts`): 
 ## Code Description
 
 Code structure: (Unlisted parts are the same as the plugin template)
+
 ```txt
 src/
 ├── index.ts：Plugin entry
@@ -73,5 +82,6 @@ src/
 ```
 
 Manual installation of the plugin:
+
 - Download and unzip package.zip, rename it to `siyuan-inbox-transfer`, and move it to `<SiYuan workspace>/data/plugins/` directory.
 - In SiYuan Note, click `Settings->Marketplace->Downloaded->Plugins`, find `Inbox Transfer (siyuan-inbox-transfer)`, and click `Enable`.
