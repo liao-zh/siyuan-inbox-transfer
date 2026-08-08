@@ -39,8 +39,12 @@
     // 处理多选
     // 多选相关的变量
     let selectedIds = $state(new Set<string>());
+    // 当前列表中选中的文档数（按当前列表过滤，避免选中已删除文档时计数超总数）
+    let selectedCount = $derived(
+        docs.filter(doc => selectedIds.has(doc.id)).length
+    );
     let isAllSelected = $derived(
-        docs.length > 0 && selectedIds.size === docs.length
+        docs.length > 0 && selectedCount === docs.length
     );
     // 选中/取消选中
     function toggleSelect(docId: string) {
@@ -219,6 +223,9 @@
             aria-label="{isAllSelected ? i18nDock["unSelectAll"] : i18nDock["selectAll"]}"
             onclick={toggleSelectAll}>
             <svg><use xlink:href="#icon{isAllSelected ? 'Check' : 'Uncheck'}"></use></svg>
+            {#if docs.length > 0}
+            <span class="dock__select-count">{selectedCount}/{docs.length}</span>
+            {/if}
         </button>
         <!-- 打开 -->
         <span class="fn__space"></span>
@@ -305,5 +312,14 @@
 
     :global(.dock-toolbar .fn__space) {
         display: block !important;
+    }
+
+    /* 全选按钮计数文本 */
+    .dock__select-count {
+        font-size: 12px;
+        line-height: 1;
+        margin-left: 4px;
+        opacity: 0.7;
+        user-select: none;
     }
 </style>
