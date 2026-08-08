@@ -189,30 +189,6 @@
         onclick={refreshHandler}>
         <svg><use xlink:href="#iconRefresh"></use></svg>
     </button>
-    <!-- 全选 -->
-    <span class="fn__space"></span>
-    <button
-        class="block__icon b3-tooltips b3-tooltips__w"
-        aria-label="{isAllSelected ? i18nDock["unSelectAll"] : i18nDock["selectAll"]}"
-        onclick={toggleSelectAll}>
-        <svg><use xlink:href="#icon{isAllSelected ? 'Check' : 'Uncheck'}"></use></svg>
-    </button>
-    <!-- 打开 -->
-    <span class="fn__space"></span>
-    <button
-        class="block__icon b3-tooltips b3-tooltips__w"
-        aria-label="{window.siyuan.languages.openBy}"
-        onclick={openHandler}>
-        <svg><use xlink:href="#iconOpen"></use></svg>
-    </button>
-    <!-- 删除 -->
-    <span class="fn__space"></span>
-    <button
-        class="block__icon b3-tooltips b3-tooltips__w"
-        aria-label="{window.siyuan.languages.delete}"
-        onclick={deleteHandler}>
-        <svg><use xlink:href="#iconTrashcan"></use></svg>
-    </button>
     <!-- 定位 -->
     <span class="fn__space"></span>
     <button
@@ -232,43 +208,75 @@
     </span>
 </div>
 <!-- 中转文档列表 -->
-<div class="fn__flex-1 fn__flex-column" style="min-height: 0; overflow-y: auto;">
-    <ul class="b3-list b3-list--background">
-        <!-- 中转站无效 -->
-        {#if !targetIsValid}
-        <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["targetInvalid"]}</li>
-        <!-- 中转文档列表为空 -->
-        {:else if docs.length === 0}
-            <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["inboxEmpty"]}</li>
-        {:else}
-        {#each docs as doc (doc.id)}
-                <!-- 中转文档列表项 -->
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
-                <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                <li
-                    class="b3-list-item"
-                    data-id="{doc.id}"
-                    class:b3-list-item--focus={selectedIds.has(doc.id)}
-                    onclick={itemHandler}>
-                    <span
-                        class="b3-list-item__action"
-                        role="checkbox"
-                        tabindex="0"
-                        aria-checked={selectedIds.has(doc.id)}
-                        aria-label="{window.siyuan.languages.select}">
-                        <svg><use xlink:href="#icon{selectedIds.has(doc.id) ? 'Check' : 'Uncheck'}"></use></svg>
-                    </span>
-                    <span class="fn__space--small"></span>
-                    <span
-                        class="b3-list-item__text"
-                        title="{doc.name}">
-                        {doc.name}
-                    </span>
-                </li>
-            {/each}
-        {/if}
-    </ul>
+<div class="fn__flex-1 fn__flex-column" style="min-height: 0;">
+    <!-- 第二行工具栏：全选 + 打开 + 删除（中转站有效时显示） -->
+    {#if targetIsValid}
+    <div class="block__icons dock-toolbar" style="flex-shrink: 0; flex-wrap: wrap;">
+        <!-- 全选 -->
+        <span class="fn__space"></span>
+        <button
+            class="block__icon b3-tooltips b3-tooltips__w"
+            aria-label="{isAllSelected ? i18nDock["unSelectAll"] : i18nDock["selectAll"]}"
+            onclick={toggleSelectAll}>
+            <svg><use xlink:href="#icon{isAllSelected ? 'Check' : 'Uncheck'}"></use></svg>
+        </button>
+        <!-- 打开 -->
+        <span class="fn__space"></span>
+        <button
+            class="block__icon b3-tooltips b3-tooltips__w"
+            aria-label="{window.siyuan.languages.openBy}"
+            onclick={openHandler}>
+            <svg><use xlink:href="#iconOpen"></use></svg>
+        </button>
+        <!-- 删除 -->
+        <span class="fn__space"></span>
+        <button
+            class="block__icon b3-tooltips b3-tooltips__w"
+            aria-label="{window.siyuan.languages.delete}"
+            onclick={deleteHandler}>
+            <svg><use xlink:href="#iconTrashcan"></use></svg>
+        </button>
+    </div>
+    {/if}
+    <!-- 滚动列表 -->
+    <div class="fn__flex-1" style="min-height: 0; overflow-y: auto;">
+        <ul class="b3-list b3-list--background">
+            <!-- 中转站无效 -->
+            {#if !targetIsValid}
+            <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["targetInvalid"]}</li>
+            <!-- 中转文档列表为空 -->
+            {:else if docs.length === 0}
+                <li class="b3-list--empty" style="opacity: 0.5;">{i18nDock["inboxEmpty"]}</li>
+            {:else}
+            {#each docs as doc (doc.id)}
+                    <!-- 中转文档列表项 -->
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_static_element_interactions -->
+                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                    <li
+                        class="b3-list-item"
+                        data-id="{doc.id}"
+                        class:b3-list-item--focus={selectedIds.has(doc.id)}
+                        onclick={itemHandler}>
+                        <span
+                            class="b3-list-item__action"
+                            role="checkbox"
+                            tabindex="0"
+                            aria-checked={selectedIds.has(doc.id)}
+                            aria-label="{window.siyuan.languages.select}">
+                            <svg><use xlink:href="#icon{selectedIds.has(doc.id) ? 'Check' : 'Uncheck'}"></use></svg>
+                        </span>
+                        <span class="fn__space--small"></span>
+                        <span
+                            class="b3-list-item__text"
+                            title="{doc.name}">
+                            {doc.name}
+                        </span>
+                    </li>
+                {/each}
+            {/if}
+        </ul>
+    </div>
 </div>
 
 <style>
@@ -287,5 +295,15 @@
         to {
             transform: rotate(360deg);
         }
+    }
+
+    /* 第二行工具栏常显：覆盖思源 .file-tree 对 .block__icons 按钮的 hover 隐藏规则 */
+    :global(.dock-toolbar .block__icon) {
+        display: flex !important;
+        opacity: 1 !important;
+    }
+
+    :global(.dock-toolbar .fn__space) {
+        display: block !important;
     }
 </style>
