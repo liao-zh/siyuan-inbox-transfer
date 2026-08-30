@@ -34,6 +34,8 @@ dock:
   selectAll: "Select All"
   unSelectAll: "Undo Select All"
   sort: "Sort"
+  selectHint: "Click: select all/deselect all\nDrag: multi-select\nCtrl+Drag: batch deselect"
+  openHint: "Click: open\nCtrl+Click: background\nAlt+Click: right"
 common:
   targetInvalid: "Target transfer station is invalid. Please go to settings first!"
   delDocConfirmDesc: "Are you sure you want to delete the selected documents?"

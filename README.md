@@ -34,6 +34,7 @@ Other function descriptions:
 
 - Dock shortcut key: Default is Shift+Alt+6, after replacing the built-in inbox, it is Alt+6, which can be modified in settings
 - Open document: Alt+click to open in a new tab on the right, Ctrl+click to open in the background, both can be used at the same time
+- Multi-select: Click the checkbox to toggle a single document. Drag on an item to batch select the swept range, and Ctrl+Drag to batch deselect it (Ctrl takes effect at press time). Multiple drags accumulate; combine with Select All.
 - Sort: The panel supports sorting by inbox collection time (newest/oldest first) or by name; documents without a recorded collection time are sorted by their creation time. The sort mode persists and stays in sync between the settings panel and the panel dropdown
 
 ## Version Updates
@@ -48,6 +49,7 @@ Main and recent update history:
 - 0.5.0: Adapted to SiYuan v3.7.0.
 - 0.5.1: Migrated from Gitee to GitCode.
 - 0.6.0: Split the panel toolbar into two rows, added select-all count, and support sorting.
+- 0.7.0: Added drag multi-select and Ctrl+Drag deselect to the panel, plus toolbar operation hints.
 
 Existing issues:
 

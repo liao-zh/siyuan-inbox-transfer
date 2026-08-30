@@ -34,6 +34,8 @@ dock:
   selectAll: "全选"
   unSelectAll: "取消全选"
   sort: "排序"
+  selectHint: "单击：全选/取消全选\n拖动：批量选中\nCtrl+拖动：批量取消选中"
+  openHint: "单击：打开\nCtrl+单击：后台打开\nAlt+单击：右侧打开"
 common:
   targetInvalid: "中转站路径无效，请先前往设置！"
   delDocConfirmDesc: "确认删除选中的中转文档吗？"
