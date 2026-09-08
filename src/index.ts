@@ -107,6 +107,13 @@ export default class PluginInboxTransfer extends Plugin {
         this.replaceBuiltin.restore();
     }
 
+    /**
+     * 思源 v3.4+ 数据监听机制：覆写声明以避免插件被整体重载
+     * （基类空实现会被思源判定为未感知数据变化，从而强制 reload 整插件）
+     * 数据刷新已由 fileManager 的 ws-main 事件监听完成，此处仅作空实现声明。
+     */
+    onDataChanged() {}
+
     uninstall() {
         logger.logInfo("卸载插件");
 
