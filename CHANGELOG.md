@@ -146,3 +146,14 @@ chore：
 
 fix：
 - 覆写 onDataChanged() 空实现：思源数据监听机制（v3.4+）下，未覆写的插件会被整插件重载；声明后避免被数据变更事件打断，功能刷新仍由 ws-main 事件监听完成
+
+### 0.7.2 (2026-09-11)
+
+fix：
+- 修复插件自身请求失败时弹出右上角错误提示的问题：`utils/api.ts` 的 `request()` 改为传 `process=false`，内核返回 `code<0` 时不再触发思源的错误提示（processMessage），改为写入警告日志并返回 null（与 siyuan-doc-navbar-light v0.8.2 同一处理思路）
+- 补上各调用点的空值兜底：中转站查询失败（sql 返回 null）或笔记本配置获取失败时视为中转站无效；中转文档列表获取失败时保留上一份列表；收集箱条目获取失败时结束收集（首页失败直接返回，分页中途失败保留已收集条目）；中转站信息缺失时不创建文档
+- `getNotebookConf` / `getHPathByID` / `sql` 的返回值声明为可空，明确「request 失败即返回 null」的约定
+
+chore：
+- 清理类型检查报错：dock 的 `element` 断言为 `HTMLElement` 后调用 `style.setProperty`；去掉 docTimePrefix / sortMode 两个 select 设置项中无人读取的空 action 回调（取值仍分别由设置面板保存与面板下拉同步）
+- 新增 `pnpm typecheck` 脚本（`tsc --noEmit`），当前无报错

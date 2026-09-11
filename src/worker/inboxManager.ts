@@ -88,6 +88,11 @@ export class InboxManager {
         // 收集第一页条目，获取页数
         let currentPage = 1;
         const data = await request("/api/inbox/getShorthands", {page: currentPage});
+        // 请求失败时 data 为 null，结束收集（避免读 null.data 抛错）
+        if (!data) {
+            logger.logWarn(`获取收集箱条目失败：page=${currentPage}`);
+            return;
+        }
         let pageCount = data.data.pagination.paginationPageCount;
         this.shorthands = this.shorthands.concat(data.data.shorthands);
 
@@ -95,6 +100,11 @@ export class InboxManager {
         while (currentPage < pageCount) {
             currentPage++;
             const data = await request("/api/inbox/getShorthands", {page: currentPage});
+            // 中途失败时保留已收集的条目
+            if (!data) {
+                logger.logWarn(`获取收集箱条目失败：page=${currentPage}`);
+                break;
+            }
             this.shorthands = this.shorthands.concat(data.data.shorthands);
         }
 
@@ -136,6 +146,11 @@ export class InboxManager {
 
         // 设置文档信息
         const targetInfo = this.plugin.fileManager.targetInfo;
+        // 兜底：中转站信息缺失时不创建文档（避免读 null.hpath / null.notebookId 抛错）
+        if (!targetInfo) {
+            logger.logWarn("收集箱移动", this.plugin.i18n.common["targetInvalid"]);
+            return;
+        }
         // 设置标题
         let title = replaceFileName(shorthand.shorthandTitle);
         const docTimePrefix = this.plugin.settingService.get("docTimePrefix");

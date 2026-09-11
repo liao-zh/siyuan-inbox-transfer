@@ -1,6 +1,6 @@
 {
   "name": "siyuan-inbox-transfer",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "type": "module",
   "description": "A Siyuan plugin to work as a transfer station for the inbox",
   "repository": "https://github.com/liao-zh/siyuan-inbox-transfer",
@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development VITE_SOURCEMAP=inline vite build --watch",
     "build": "cross-env NODE_ENV=production vite build",
+    "typecheck": "tsc --noEmit",
     "make-link": "node --no-warnings ./scripts/make_dev_link.js",
     "make-link-win": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/elevate.ps1 -scriptPath ./scripts/make_dev_link.js",
     "update-version": "node --no-warnings ./scripts/update_version.js",
@@ -26,7 +27,7 @@
     "minimist": "^1.2.8",
     "rollup-plugin-livereload": "^2.0.5",
     "sass": "^1.97.1",
-    "siyuan": "1.2.6",
+    "siyuan": "1.2.7",
     "svelte": "^5.46.0",
     "svelte-preprocess": "^6.0.3",
     "ts-node": "^10.9.1",

@@ -58,10 +58,11 @@ export class SettingService {
                     // 检查并设置目标id
                     await this.plugin.fileManager.setTarget(value);
                     await this.plugin.fileManager.updateDocs();
-                    // 提示结果
+                    // 提示结果（targetIsValid 为 true 时 targetInfo 必然非空，此处仅作兜底）
+                    const targetInfo = this.plugin.fileManager.targetInfo;
                     let hint = "";
-                    if (get(this.plugin.fileManager.targetIsValid)) {
-                        hint = `${i18nSetting["targetId"]["targetHint"]}${this.plugin.fileManager.targetInfo.notebookName}/${this.plugin.fileManager.targetInfo.hpath}`;
+                    if (get(this.plugin.fileManager.targetIsValid) && targetInfo) {
+                        hint = `${i18nSetting["targetId"]["targetHint"]}${targetInfo.notebookName}/${targetInfo.hpath}`;
                         showMessage(hint, 2000, "info");
                     } else {
                         hint = i18nSetting["targetId"]["targetInvalid"]
@@ -72,6 +73,7 @@ export class SettingService {
         });
 
         // 文档名日期前缀
+        // 无需 action：选中值由思源设置面板在保存时统一写入，使用时经 get("docTimePrefix") 读取
         this.settingUtils.addItem({
             key: "docTimePrefix",
             value: 1,
@@ -82,17 +84,11 @@ export class SettingService {
                 1: i18nSetting["docTimePrefix"]["noPrefix"],
                 2: "YYYY-MM-DD",
                 3: "YYYY-MM-DD HH:mm"
-            },
-            action: {
-                callback: () => {
-                    // Read data in real time
-                    let value = this.settingUtils.take("docTimePrefix");
-                    // logger.logDebug(`设置：docTimePrefix`, value);
-                }
             }
         });
 
         // 面板文档排序方式
+        // 无需 action：面板下拉自行经 sortModeStore 同步，设置面板保存时由上方 callback 同步
         this.settingUtils.addItem({
             key: "sortMode",
             value: "docTree",
@@ -105,13 +101,6 @@ export class SettingService {
                 collectedAsc: i18nSetting["sortMode"]["collectedAsc"],
                 nameAsc: i18nSetting["sortMode"]["nameAsc"],
                 nameDesc: i18nSetting["sortMode"]["nameDesc"]
-            },
-            action: {
-                callback: () => {
-                    // Read data in real time
-                    let value = this.settingUtils.take("sortMode");
-                    // logger.logDebug(`设置：sortMode`, value);
-                }
             }
         });
 

@@ -50,6 +50,7 @@ Main and recent update history:
 - 0.5.1: Migrated from Gitee to GitCode.
 - 0.6.0: Split the panel toolbar into two rows, added select-all count, and support sorting.
 - 0.7.0: Added drag multi-select and Ctrl+Drag deselect to the panel, plus toolbar operation hints.
+- 0.7.2: Failed requests no longer pop up an error message (logged instead), with null-safety guards added.
 
 Existing issues:
 

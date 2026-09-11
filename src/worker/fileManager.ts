@@ -89,14 +89,20 @@ export class FileManager {
     private async getTargetInfo(targetId: string): Promise<null|ITarget> {
         // sql查询中转站的笔记本和路径
         const data = await sql(`SELECT box, path, hpath FROM blocks WHERE id="${targetId}" and type="d"`);
-        // 结果为空，则返回null
-        if (data.length === 0) {
+        // 请求失败（data 为 null）或结果为空，均视为中转站无效
+        if (!data || data.length === 0) {
             return null;
         }
         // 结果不为空，则返回中转站信息
         else {
             const notebookId = data[0]["box"] as string;
             const notebookConf = await getNotebookConf(notebookId);
+            // 笔记本配置获取失败（笔记本已删除/未打开）时视为中转站无效，
+            // 避免读 conf.name 抛错（request 失败时返回 null）
+            if (!notebookConf) {
+                logger.logWarn(`获取笔记本配置失败，中转站无效：notebookId=${notebookId}`);
+                return null;
+            }
             return {
                 id: targetId,
                 notebookId,
@@ -153,8 +159,14 @@ export class FileManager {
                 path: this.targetInfo.path,
             }
         );
+        // 请求失败时 data 为 null，保留上一份列表（下一轮事件会重新刷新），
+        // 避免读 null.files 抛错，也避免清空面板造成列表凭空消失的假象
+        if (!data) {
+            logger.logWarn(`获取中转文档列表失败：notebook=${this.targetInfo.notebookId}, path=${this.targetInfo.path}`);
+            return;
+        }
         // 提取文档信息
-        const files = data.files;
+        const files = data.files ?? [];
         this.docs.set(files.map(item => ({
             name: item.name.replace(/\.sy$/, ''),
             id: item.id,

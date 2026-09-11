@@ -60,7 +60,8 @@ export default class PluginInboxTransfer extends Plugin {
                 // 创建容器类，会自动加上.sy__${this.plugin.name}__dock-tab
                 this.element.classList.add("fn__flex-column", "file-tree");
                 // 设置style
-                this.element.style.setProperty("overflow", "hidden", "important");  // overflow:hidden 以免出现y滚动条
+                // 注：dock 的 element 类型为 Element，运行时是 HTMLElement，故此处断言
+                (this.element as HTMLElement).style.setProperty("overflow", "hidden", "important");  // overflow:hidden 以免出现y滚动条
                 // 清空容器内容
                 this.element.innerHTML = '';
                 // 加载svelte组件
